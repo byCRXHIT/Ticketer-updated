@@ -1,10 +1,13 @@
 /* Import modules */
-const { Client, Intents, Collection } = require('discord.js');
+const { Client, Intents, Collection, MessageEmbed } = require('discord.js');
 const { readdirSync } = require('fs');
 const { REST } = require('@discordjs/rest');
 const { Routes } = require('discord-api-types/v9');
 const { join } = require('path');
 const { ChalkAdvanced } = require('chalk-advanced');
+
+/* Import modules */
+const { staffCommands } = require('../config.json');
 
 /* Export bot */
 module.exports = () => {
@@ -43,4 +46,24 @@ module.exports = () => {
 
   restClient.put(Routes.applicationGuildCommands(process.env.CLIENT_ID, process.env.DEVGUILD_ID), { body: interactions })
     .catch(console.error);
+
+  client.on('interactionCreate', async (interaction) => {
+    if (!interaction.isCommand()) return;
+
+    const command = client.interactions.get(interaction.commandName);
+
+    if (command) {
+      try {
+        await command.execute(interaction, client);
+      } catch (e) {
+        console.error(e);
+
+        if (interaction.deferred || interaction.replied) {
+          interaction.editReply('Error while executing the interaction');
+        } else {
+          interaction.reply('Error while executing the interaction');
+        }
+      }
+    }
+  });
 };
