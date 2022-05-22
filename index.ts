@@ -5,5 +5,8 @@ dotenv.config();
 /* Misc */
 console.clear();
 
+/* Import database */
+require('./db/main.js')();
+
 /* Initialize client */
 require('./bot/main.js')();

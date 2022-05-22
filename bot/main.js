@@ -1,5 +1,7 @@
 /* Import modules */
-const { Client, Intents, Collection, MessageEmbed } = require('discord.js');
+const {
+  Client, Intents, Collection, MessageEmbed, MessageActionRow, MessageButton, MessageSelectMenu,
+} = require('discord.js');
 const { readdirSync } = require('fs');
 const { REST } = require('@discordjs/rest');
 const { Routes } = require('discord-api-types/v9');
@@ -8,6 +10,7 @@ const { ChalkAdvanced } = require('chalk-advanced');
 
 /* Import modules */
 const { staffCommands } = require('../config.json');
+const Guild = require('../db/models/guild');
 
 /* Export bot */
 module.exports = () => {
@@ -47,23 +50,57 @@ module.exports = () => {
   restClient.put(Routes.applicationGuildCommands(process.env.CLIENT_ID, process.env.DEVGUILD_ID), { body: interactions })
     .catch(console.error);
 
+  // Listen for slash commands
   client.on('interactionCreate', async (interaction) => {
-    if (!interaction.isCommand()) return;
+    Guild.findOne({ id: interaction.guild.id }).then(async (dbGuild) => {
+      if (!dbGuild) {
+        console.log(0);
+        const g = new Guild({
+          id: interaction.guild.id,
+        });
 
-    const command = client.interactions.get(interaction.commandName);
+        g.save();
+        dbGuild = g;
+      }
 
-    if (command) {
-      try {
-        await command.execute(interaction, client);
-      } catch (e) {
-        console.error(e);
+      if (!interaction.isCommand()) return;
 
-        if (interaction.deferred || interaction.replied) {
-          interaction.editReply('Error while executing the interaction');
-        } else {
-          interaction.reply('Error while executing the interaction');
+      const command = client.interactions.get(interaction.commandName);
+
+      if (command) {
+        try {
+          await command.execute(interaction, client);
+        } catch (e) {
+          console.error(e);
+
+          if (interaction.deferred || interaction.replied) {
+            interaction.editReply('Error while executing the interaction');
+          } else {
+            interaction.reply('Error while executing the interaction');
+          }
         }
       }
-    }
+    });
+  });
+
+  // Button listener
+  client.on('interactionCreate', async (interaction) => {
+    Guild.findOne({ id: interaction.guild.id }).then(async (dbGuild) => {
+      if (!dbGuild) return;
+
+      if (!interaction.isButton() || !interaction.isSelectMenu()) {
+        try {
+          require(`./handler/${interaction.customId}`)(interaction, client, dbGuild);
+        } catch (e) {
+          let rejected = [];
+          if (rejected.includes(interaction.customId)) return;
+          if (interaction.deferred || interaction.replied) {
+            interaction.editReply('Error while executing the interaction');
+          } else {
+            interaction.reply('Error while executing the interaction');
+          }
+        }
+      } else return;
+    });
   });
 };
