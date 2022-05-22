@@ -33,10 +33,10 @@ module.exports = async (interaction, client, dbGuild) => {
         .setStyle('PRIMARY')
         .setEmoji('977920180711723098'),
       new MessageButton()
-      .setCustomId('ticket-transcript')
-      .setLabel('Transcript')
-      .setStyle('PRIMARY')
-      .setEmoji,
+        .setCustomId('ticket-transcript')
+        .setLabel('Transcript')
+        .setStyle('PRIMARY')
+        .setEmoji,
       new MessageButton()
         .setCustomId('ticket-close')
         .setLabel('Close')
