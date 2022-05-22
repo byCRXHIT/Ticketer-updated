@@ -30,15 +30,5 @@ module.exports = {
       );
 
     await interaction.reply({ embeds: [helpEmbed], ephemeral: true, components: [row] });
-
-    const collector = interaction.channel.createMessageComponentCollector({});
-
-    collector.on('collect', (i) => {
-      console.log(1);
-      i.reply({
-        content: 'Test',
-        emphermal: true,
-      });
-    });
   },
 };

@@ -36,7 +36,7 @@ module.exports = async (interaction, client, dbGuild) => {
         .setCustomId('ticket-transcript')
         .setLabel('Transcript')
         .setStyle('PRIMARY')
-        .setEmoji,
+        .setEmoji('978041593313501184'),
       new MessageButton()
         .setCustomId('ticket-close')
         .setLabel('Close')
@@ -44,5 +44,14 @@ module.exports = async (interaction, client, dbGuild) => {
         .setEmoji('977712715554488391'),
     );
 
-  ticket.send({ embeds: [ticketEmbed], ephemeral: false, components: [row] });
+  const message = await ticket.send({
+    embeds: [ticketEmbed], ephemeral: false, components: [row], fetchReply: true,
+  });
+
+  dbGuild.tickets.push({
+    id: dbGuild.ticketid, reason, created: new Date(), channel: ticket.id, creator: interaction.user.id, members: [interaction.user.id], messages: [], claimed: 'none', state: 'open', message: message.id,
+  });
+
+  dbGuild.ticketid += 1;
+  dbGuild.save();
 };
