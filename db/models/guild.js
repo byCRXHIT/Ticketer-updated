@@ -6,8 +6,6 @@ const guildSchema = new Schema({
   id: { type: String, unique: true },
   badges: { type: Array, default: [] },
   tickets: { type: Array, default: [] },
-  staff: { type: Array, default: [] },
-  staff_role: { type: String, default: 'none' },
   options: {
     type: Array,
     default: [{
@@ -16,8 +14,17 @@ const guildSchema = new Schema({
       value: '0',
     }],
   },
+  settings: {
+    staff: {
+      role: { type: String, default: 'none' },
+      members: { type: Array, default: [] },
+    },
+    transcript: {
+      type: { type: String, default: 'simple' },
+      enabled: { type: Boolean, default: false },
+    },
+  },
   log: { type: Array, default: [] },
-  setuped: { type: Boolean, default: false },
   nameprefix: { type: String, default: 'ticket-{id}' },
   ticketid: { type: Number, default: 1 },
 }, { timestamps: true });

@@ -103,4 +103,21 @@ module.exports = () => {
       } else return;
     });
   });
+
+  // Message listener
+  client.on('messageCreate', (message) => {
+    Guild.findOne({ id: message.guild.id }).then(async (dbGuild) => {
+      if (!dbGuild || message.author.bot) return;
+
+      const ticket = dbGuild.tickets[dbGuild.tickets.findIndex((t) => t.channel == message.channel.id)];
+      if (ticket) {
+        if (!ticket.members.includes(message.author.id)) ticket.members.push(message.author.id);
+        ticket.messages.push({
+          message: message.content, author: message.author.id, name: message.author.tag, timestamp: new Date(),
+        });
+
+        Guild.findOneAndUpdate({ id: message.guild.id }, { tickets: dbGuild.tickets }).catch();
+      }
+    });
+  });
 };
