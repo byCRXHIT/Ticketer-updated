@@ -7,7 +7,7 @@ const Guild = require('../../db/models/guild');
 
 /* Export */
 module.exports = (interaction, client, dbGuild) => {
-  if (interaction.member.roles.cache.has(dbGuild.staff_role)) {
+  if (interaction.member.roles.cache.has(dbGuild.settings.staff.role)) {
     const dbTicket = dbGuild.tickets[dbGuild.tickets.findIndex((t) => t.channel == interaction.channel.id)];
     if (dbTicket.claimed == 'none') {
       dbTicket.claimed = interaction.user.id;

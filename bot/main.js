@@ -74,9 +74,9 @@ module.exports = () => {
           console.error(e);
 
           if (interaction.deferred || interaction.replied) {
-            interaction.editReply('Error while executing the interaction');
+            interaction.editReply({ content: 'Error while executing the interaction', ephemeral: true });
           } else {
-            interaction.reply('Error while executing the interaction');
+            interaction.reply({ content: 'Error while executing the interaction', ephemeral: true });
           }
         }
       }
@@ -88,7 +88,7 @@ module.exports = () => {
     Guild.findOne({ id: interaction.guild.id }).then(async (dbGuild) => {
       if (!dbGuild) return;
 
-      if (!interaction.isButton() || !interaction.isSelectMenu()) {
+      if (interaction.isButton() || interaction.isSelectMenu()) {
         try {
           require(`./handler/${interaction.customId}`)(interaction, client, dbGuild);
         } catch (e) {

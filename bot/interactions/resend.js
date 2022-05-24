@@ -1,26 +1,38 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
-const { MessageEmbed, MessageActionRow, MessageButton } = require('discord.js');
+const {
+  MessageEmbed, MessageActionRow, MessageButton, Permissions,
+} = require('discord.js');
 
 module.exports = {
   data: new SlashCommandBuilder()
     .setName('resend')
     .setDescription('Provides you a list default commands'),
   async execute(interaction, client) {
-    const helpEmbed = new MessageEmbed()
-      .setTitle('> Ticket')
-      .setDescription('To create a ticket please use the buttons below.')
-      .setFooter({ text: client.user.tag, iconURL: client.user.avatarURL({ dynamic: true }) });
+    if (interaction.member.permissions.has(Permissions.MANAGE_GUILD) || interaction.member.roles.has()) {
+      const helpEmbed = new MessageEmbed()
+        .setTitle('> Ticket')
+        .setDescription('To create a ticket please use the buttons below.')
+        .setFooter({ text: client.user.tag, iconURL: client.user.avatarURL({ dynamic: true }) });
 
-    const row = new MessageActionRow()
-      .addComponents(
-        new MessageButton()
-          .setCustomId('ticket-create')
-          .setDisabled(false)
-          .setEmoji('🎫')
-          .setStyle('SUCCESS'),
-      );
+      const row = new MessageActionRow()
+        .addComponents(
+          new MessageButton()
+            .setCustomId('ticket-create')
+            .setDisabled(false)
+            .setEmoji('🎫')
+            .setStyle('SUCCESS'),
+        );
 
-    interaction.deleteReply();
-    interaction.channel.send({ embeds: [helpEmbed], ephemeral: false, components: [row] });
+      interaction.deferReply();
+      interaction.deleteReply();
+      interaction.channel.send({ embeds: [helpEmbed], ephemeral: false, components: [row] });
+    } else {
+      const errorEmbed = new MessageEmbed()
+        .setTitle('> Settings')
+        .setDescription('You are not a server administrator of this guild.')
+        .setFooter({ text: interaction.user.tag, iconURL: interaction.user.avatarURL({ dynamic: true }) });
+
+      interaction.reply({ embeds: [errorEmbed], ephemeral: true });
+    }
   },
 };
