@@ -92,6 +92,7 @@ module.exports = () => {
         try {
           require(`./handler/${interaction.customId}`)(interaction, client, dbGuild);
         } catch (e) {
+          console.log(e);
           let rejected = [];
           if (rejected.includes(interaction.customId)) return;
           if (interaction.deferred || interaction.replied) {

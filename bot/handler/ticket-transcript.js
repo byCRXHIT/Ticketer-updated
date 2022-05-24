@@ -3,14 +3,12 @@ const {
   MessageEmbed, MessageActionRow, MessageButton, MessageSelectMenu,
 } = require('discord.js');
 
+const Guild = require('../../db/models/guild');
+const { createTranscript } = require('../../functions/bot');
+
 /* Export */
 module.exports = (interaction, client, dbGuild) => {
   const dbTicket = dbGuild.tickets[dbGuild.tickets.findIndex((t) => t.channel == interaction.channel.id)];
-  const deleteEmbed = new MessageEmbed()
-    .setTitle('> Delete Ticket')
-    .setDescription('This ticket will be deleted in 10 seconds.')
-    .setFooter({ text: interaction.user.tag, iconURL: interaction.user.avatarURL({ dynamic: true }) });
-
   const transcriptEmbed = new MessageEmbed()
     .setTitle('> Ticket transcript')
     .setDescription('This is the transcript of this ticket.')
@@ -24,15 +22,9 @@ module.exports = (interaction, client, dbGuild) => {
         .setStyle('LINK'),
     );
 
-  interaction.channel.messages.cache.get(interaction.message.id).delete();
-  interaction.channel.send({ embeds: [deleteEmbed], ephemeral: false });
-  interaction.channel.send({
+  interaction.reply({
     embeds: [transcriptEmbed],
-    ephemeral: false,
+    ephemeral: true,
     components: [row],
   });
-
-  setTimeout(() => {
-    interaction.channel.delete();
-  }, 10000);
 };
