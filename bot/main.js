@@ -12,7 +12,7 @@ const { ChalkAdvanced } = require('chalk-advanced');
 const { staffCommands } = require('../config.json');
 const Guild = require('../db/models/guild');
 
-/* Export bot */
+/* Export */
 module.exports = () => {
   // Create client
   const client = new Client({

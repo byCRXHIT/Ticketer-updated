@@ -17,7 +17,7 @@ module.exports = (interaction, client, dbGuild) => {
   const row = new MessageActionRow()
     .addComponents(
       new MessageButton()
-        .setURL(`https://ticketer.tk/ticket/${interaction.guild.id}/${dbTicket.channel}?password=${String(interaction.guild.id).substring(0, interaction.guild.id.length / 2)}${String(dbTicket.channel).substring(dbTicket.channel.length / 2, dbTicket.channel.length)}`)
+        .setURL(`https://ticketer.tk/ticket/${interaction.guild.id}/${dbTicket.channel}?password=${String(interaction.guild.id).substring(0, interaction.guild.id.length / 2)}${String(dbTicket.channel).substring(dbTicket.channel.length / 2, dbTicket.channel.length)}&user=${interaction.user.id}`)
         .setLabel('Download')
         .setStyle('LINK'),
     );

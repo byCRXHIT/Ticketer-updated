@@ -103,6 +103,9 @@ dist
 # TernJS port file
 .tern-port
 
-#Config
+# Config
 .eslintrc.js
 .tsconfig.json
+
+# Cdn
+web/cdn/tickets/*

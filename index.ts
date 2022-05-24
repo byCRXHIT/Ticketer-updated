@@ -10,3 +10,6 @@ require('./db/main.js')();
 
 /* Initialize client */
 require('./bot/main.js')();
+
+/* Initialize website */
+require('./web/main.js')();
