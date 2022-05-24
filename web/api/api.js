@@ -12,7 +12,13 @@ router.post('/ticket/create', (req, res) => {
 
   let members = '';
   ticket.members.forEach((member) => {
-    members += `<div class="user"><div class="img"></div><a class="name">${member}</a></div>`
+    members += `<div class="user"><div class="img"></div><a class="name">${member.name}</a></div>`;
+  });
+
+  let messages = '';
+  ticket.messages.forEach((message) => {
+    const date = new Date(message.timestamp);
+    messages += `<div class="message"><div class="user"><div class="img"></div><a>${message.name} (${date.getMonth()}.${date.getDate()}.${date.getFullYear()}, ${date.getMilliseconds()}:${date.getMinutes()}:${date.getHours()})</a></div><a class="value">${message.message}</a></div>`;
   });
 
   const file = `
@@ -30,13 +36,8 @@ router.post('/ticket/create', (req, res) => {
             </nav>
             <div class="content">
                 <div class="messages">
-                    <div class="message">
-                        <div class="user">
-                            <div class="img"></div>
-                            <a>BLACK#0001</a>
-                        </div>
-                        <a class="value">Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet.</a>
-                    </div>
+                    ${messages}
+                    ${ticket.state == 'closed' ? '<div class="message"><div class="user"><div class="img"></div><a>System</a></div><a class="value">This ticket has been closed.</a></div>' : ''}
                 </div>
                 <div class="users">
                     <div class="list">
@@ -62,6 +63,8 @@ router.post('/ticket/create', (req, res) => {
     file,
     { overwrite: true },
   );
+
+  res.json({ saved: true });
 });
 
 module.exports = router;

@@ -51,13 +51,6 @@ const web = (app) => {
   return app;
 };
 
-const cdn = (app) => {
-  // Import cdn
-  app.use('/cdn', require('../cdn/main'));
-
-  return app;
-};
-
 /* Export */
 module.exports = {
   initialize,

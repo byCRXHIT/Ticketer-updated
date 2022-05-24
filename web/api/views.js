@@ -7,10 +7,12 @@ router.get('/', (req, res) => {
 });
 
 router.get('/ticket/:guild/:channel', (req, res) => {
-  const { password, user } = req.query;
+  const { password } = req.query;
   const { guild, channel } = req.params;
 
-  res.sendFile(join(__dirname, `../cdn/tickets/${guild}/${channel}.html`));
+  if (password == String(guild).substring(0, guild.length / 2) + String(channel).substring(channel.length / 2, channel.length)) {
+    res.sendFile(join(__dirname, `../cdn/tickets/${guild}/${channel}.html`));
+  } else res.send('Wrong password');
 });
 
 module.exports = router;

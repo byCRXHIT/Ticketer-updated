@@ -49,7 +49,7 @@ module.exports = async (interaction, client, dbGuild) => {
   });
 
   dbGuild.tickets.push({
-    id: dbGuild.ticketid, reason, created: new Date(), channel: ticket.id, creator: interaction.user.id, members: [interaction.user.id], messages: [], claimed: 'none', state: 'open', message: message.id,
+    id: dbGuild.ticketid, reason, created: new Date(), channel: ticket.id, creator: interaction.user.id, members: [{ id: interaction.user.id, name: interaction.user.tag }], messages: [], claimed: 'none', state: 'open', message: message.id,
   });
 
   dbGuild.ticketid += 1;

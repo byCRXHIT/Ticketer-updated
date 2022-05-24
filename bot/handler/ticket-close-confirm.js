@@ -3,9 +3,18 @@ const {
   MessageEmbed, MessageActionRow, MessageButton, MessageSelectMenu,
 } = require('discord.js');
 
+/* Import files */
+const Guild = require('../../db/models/guild');
+const { createTranscript } = require('../../functions/bot');
+
 /* Export */
 module.exports = (interaction, client, dbGuild) => {
   const dbTicket = dbGuild.tickets[dbGuild.tickets.findIndex((t) => t.channel == interaction.channel.id)];
+
+  dbTicket.state = 'closed';
+  Guild.findOneAndUpdate({ id: interaction.guild.id }, { tickets: dbGuild.tickets }).catch();
+
+  createTranscript(interaction.guild.id, dbTicket);
   const deleteEmbed = new MessageEmbed()
     .setTitle('> Delete Ticket')
     .setDescription('This ticket will be deleted in 10 seconds.')
@@ -19,7 +28,7 @@ module.exports = (interaction, client, dbGuild) => {
   const row = new MessageActionRow()
     .addComponents(
       new MessageButton()
-        .setURL(`https://ticketer.tk/ticket/${interaction.guild.id}/${dbTicket.channel}?password=${String(interaction.guild.id).substring(0, interaction.guild.id.length / 2)}${String(dbTicket.channel).substring(dbTicket.channel.length / 2, dbTicket.channel.length)}`)
+        .setURL(`https://ticketer.tk/ticket/${interaction.guild.id}/${interaction.channel.id}?password=${String(interaction.guild.id).substring(0, interaction.guild.id.length / 2)}${String(interaction.channel.id).substring(interaction.channel.id.length / 2, interaction.channel.id.length)}`)
         .setLabel('Download')
         .setStyle('LINK'),
     );

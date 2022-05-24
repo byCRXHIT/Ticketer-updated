@@ -112,7 +112,7 @@ module.exports = () => {
 
       const ticket = dbGuild.tickets[dbGuild.tickets.findIndex((t) => t.channel == message.channel.id)];
       if (ticket) {
-        if (!ticket.members.includes(message.author.id)) ticket.members.push(message.author.id);
+        if (ticket.members.findIndex((m) => m.id == message.author.id)) ticket.members.push({ id: message.author.id, name: message.author.tag });
         ticket.messages.push({
           message: message.content, author: message.author.id, name: message.author.tag, timestamp: new Date(),
         });
