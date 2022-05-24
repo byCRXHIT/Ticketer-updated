@@ -72,12 +72,6 @@ module.exports = () => {
           await command.execute(interaction, client);
         } catch (e) {
           console.error(e);
-
-          if (interaction.deferred || interaction.replied) {
-            interaction.editReply({ content: 'Error while executing the interaction', ephemeral: true });
-          } else {
-            interaction.reply({ content: 'Error while executing the interaction', ephemeral: true });
-          }
         }
       }
     });
@@ -92,17 +86,21 @@ module.exports = () => {
         try {
           require(`./handler/${interaction.customId}`)(interaction, client, dbGuild);
         } catch (e) {
-          console.log(e);
-          let rejected = [];
-          if (rejected.includes(interaction.customId)) return;
-          if (interaction.deferred || interaction.replied) {
-            interaction.editReply('Error while executing the interaction');
-          } else {
-            interaction.reply('Error while executing the interaction');
-          }
+          console.error(e);
         }
       } else return;
     });
+  });
+
+  client.on('modalSubmit', async (interaction) => {
+    try {
+      Guild.findOne({ id: interaction.guild.id }).then(async (dbGuild) => {
+        if (!dbGuild) return;
+        require(`./handler/${interaction.customId}`)(interaction, client, dbGuild);
+      });
+    } catch (e) {
+      console.error(e);
+    }
   });
 
   // Message listener

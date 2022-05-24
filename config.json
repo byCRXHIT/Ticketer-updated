@@ -1,3 +1,4 @@
 {
-    "staffCommands": []
+    "staffCommands": ["shutdown"],
+    "developer": ["805898988402376725"]
 }

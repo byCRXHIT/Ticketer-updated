@@ -1,6 +1,6 @@
 /* Import modules */
 const {
-  MessageEmbed, MessageActionRow, MessageButton, MessageSelectMenu,
+  MessageEmbed, MessageActionRow, MessageButton, MessageSelectMenu, TextInputComponent,
 } = require('discord.js');
 
 /* Export */
@@ -38,6 +38,11 @@ module.exports = async (interaction, client, dbGuild) => {
         .setStyle('PRIMARY')
         .setEmoji('978041593313501184'),
       new MessageButton()
+        .setCustomId('ticket-members')
+        .setLabel('Add user')
+        .setStyle('PRIMARY')
+        .setEmoji('978747421892968538'),
+      new MessageButton()
         .setCustomId('ticket-close')
         .setLabel('Close')
         .setStyle('DANGER')
@@ -45,12 +50,19 @@ module.exports = async (interaction, client, dbGuild) => {
     );
 
   const message = await ticket.send({
-    embeds: [ticketEmbed], ephemeral: false, components: [row], fetchReply: true,
+    embeds: [ticketEmbed], ephemeral: false, components: [row],
   });
 
   dbGuild.tickets.push({
     id: dbGuild.ticketid, reason, created: new Date(), channel: ticket.id, creator: interaction.user.id, members: [{ id: interaction.user.id, name: interaction.user.tag }], messages: [], claimed: 'none', state: 'open', message: message.id,
   });
+
+  const successEmbed = new MessageEmbed()
+    .setTitle('> Ticket created')
+    .setDescription(`The ticket ${ticket} was successfully created`)
+    .setFooter({ text: interaction.user.tag, iconURL: interaction.user.avatarURL({ dynamic: true }) });
+
+  interaction.editReply({ embeds: [successEmbed], ephemeral: true });
 
   dbGuild.ticketid += 1;
   dbGuild.save();
