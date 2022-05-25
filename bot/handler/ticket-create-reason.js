@@ -15,7 +15,7 @@ module.exports = async (interaction, client, dbGuild) => {
   const ticket = await interaction.guild.channels.create(dbGuild.nameprefix.replace('{id}', dbGuild.ticketid), {
     type: 'text',
     permissionOverwrites: [
-      { id: interaction.user.id, allow: ['VIEW_CHANNEL', 'READ_MESSAGE_HISTORY'], deny: ['SEND_MESSAGES'] },
+      { id: interaction.user.id, allow: ['VIEW_CHANNEL', 'READ_MESSAGE_HISTORY', 'SEND_MESSAGES'], deny: [] },
       { id: interaction.guild.roles.everyone, deny: ['VIEW_CHANNEL'] },
     ],
   });
@@ -42,6 +42,11 @@ module.exports = async (interaction, client, dbGuild) => {
         .setLabel('Add user')
         .setStyle('PRIMARY')
         .setEmoji('978747421892968538'),
+      new MessageButton()
+        .setCustomId('ticket-lock')
+        .setLabel('Lock/Unlock')
+        .setStyle('DANGER')
+        .setEmoji('979002078154358784'),
       new MessageButton()
         .setCustomId('ticket-close')
         .setLabel('Close')
