@@ -33,7 +33,7 @@ module.exports = (app, client) => {
       await guilds.push({
         id: guild.id,
         name: guild.name,
-        icon: `https://cdn.discordapp.com/icons/${guild.id}/${guild.icon}.png`,
+        icon: `https://cdn.discordapp.com/icons/${guild.id}/${guild.icon}.webp`,
         joined,
       });
     })
