@@ -8,7 +8,7 @@ module.exports = {
     .setName('resend')
     .setDescription('Provides you a list default commands'),
   async execute(interaction, client) {
-    if (interaction.member.permissions.has(Permissions.MANAGE_GUILD) || interaction.member.roles.has()) {
+    if (interaction.member.permissions.has(Permissions.MANAGE_GUILD)) {
       const helpEmbed = new MessageEmbed()
         .setTitle('> Ticket')
         .setDescription('To create a ticket please use the buttons below.')

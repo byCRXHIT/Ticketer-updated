@@ -22,7 +22,7 @@ module.exports = async (interaction, client, dbGuild) => {
 
   const ticketEmbed = new MessageEmbed()
     .setTitle(`> Ticket ${dbGuild.ticketid}`)
-    .setDescription(`Welcome to this ticket. Please describe your issue in detail while a Staff member can handle your ticket.\n\nReason: \`${reason}\`\n\nUser: \`${interaction.user.tag}\``)
+    .setDescription(`Welcome to this ticket. Please describe your issue in detail while a Staff member can handle your ticket.\n\nReason: \`${reason}\`\n\nStaff: \`none\``)
     .setFooter({ text: interaction.user.tag, iconURL: interaction.user.avatarURL({ dynamic: true }) });
 
   const row = new MessageActionRow()

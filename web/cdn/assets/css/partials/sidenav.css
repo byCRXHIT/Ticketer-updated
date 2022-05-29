@@ -1,0 +1,11 @@
+body .sidenav {
+    display: flex;
+    flex-direction: column;
+    width: 330px;
+    position: fixed;
+    left: 0;
+    top: 66px;
+    height: 100%;
+    background-color: #121212;
+    box-shadow: 2px 1px 8px 2px rgba(0,0,0,0.21);
+}

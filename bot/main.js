@@ -13,18 +13,14 @@ const { staffCommands } = require('../config.json');
 const Guild = require('../db/models/guild');
 
 /* Export */
-module.exports = () => {
+module.exports = (client) => {
   // Create client
-  const client = new Client({
-    intents: [
-      Intents.FLAGS.GUILDS,
-      Intents.FLAGS.GUILD_MESSAGES,
-    ],
-  });
 
   // Wait for client to connect
   client.on('ready', () => {
     console.log(ChalkAdvanced.bgGreen(ChalkAdvanced.black(' [BOT] Bot is ready ')));
+    /* Initialize website */
+    require('../web/main')(client);
   });
 
   // Log in into client

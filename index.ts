@@ -1,5 +1,6 @@
 /* Import modules */
 import dotenv from 'dotenv';
+import { Client, Intents } from 'discord.js';
 dotenv.config();
 
 /* Misc */
@@ -9,7 +10,15 @@ console.clear();
 require('./db/main.js')();
 
 /* Initialize client */
-require('./bot/main.js')();
+const client = new Client({
+    intents: [
+      Intents.FLAGS.GUILDS,
+      Intents.FLAGS.GUILD_MESSAGES,
+    ],
+});
 
-/* Initialize website */
-require('./web/main.js')();
+const bot = async () => {
+    await require('./bot/main.js')(client);
+}
+
+bot();
