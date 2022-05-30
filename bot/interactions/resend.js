@@ -11,18 +11,11 @@ module.exports = {
     .setDescription('Provides you a list default commands'),
   async execute(interaction, client) {
     if (interaction.member.permissions.has(Permissions.MANAGE_GUILD)) {
-<<<<<<< HEAD
       Guild.findOne({ id: interaction.guild.id }).then(async (dbGuild) => {
         const helpEmbed = new MessageEmbed()
           .setTitle('> Ticket')
           .setDescription(dbGuild.settings.messages.create.replaceAll('\\n', '\n'))
           .setFooter({ text: client.user.tag, iconURL: client.user.avatarURL({ dynamic: true }) });
-=======
-      const helpEmbed = new MessageEmbed()
-        .setTitle('> Ticket')
-        .setDescription('To create a ticket please use the buttons below.')
-        .setFooter({ text: client.user.tag, iconURL: client.user.avatarURL({ dynamic: true }) });
->>>>>>> 1639eb7019f6697dd5445ae7fa58587f33675055
 
         const row = new MessageActionRow()
           .addComponents(

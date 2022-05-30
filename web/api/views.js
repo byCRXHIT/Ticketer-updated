@@ -48,7 +48,6 @@ module.exports = (app, client) => {
     if (!req.session.passport) return res.redirect('/api/login');
     if (!req.params.id) return res.redirect('/dashboard');
 
-<<<<<<< HEAD
     let guild;
     try {
       guild = await client.guilds.fetch(req.params.id);
@@ -58,24 +57,16 @@ module.exports = (app, client) => {
 
     if(!guild) return res.redirect('/dashboard')
 
-=======
-    let guild = client.guilds.cache.get(req.params.id);
->>>>>>> 1639eb7019f6697dd5445ae7fa58587f33675055
     Guild.findOne({ id: req.params.id }).then(async (dbGuild) => {
       if (!dbGuild || !guild) return res.redirect('/dashboard');
 
       await res.render(join(__dirname, '../views/server.ejs'), {
         user: req.session.passport.user,
-<<<<<<< HEAD
         guild,
-=======
-        guild: dbGuild,
->>>>>>> 1639eb7019f6697dd5445ae7fa58587f33675055
         db: dbGuild
       });
     })
   })
-<<<<<<< HEAD
 
   app.get('/dashboard/:id/tickets', async (req, res) => {
     if (!req.session.passport) return res.redirect('/api/login');
@@ -138,8 +129,6 @@ module.exports = (app, client) => {
       }, 200)
     })
   })
-=======
->>>>>>> 1639eb7019f6697dd5445ae7fa58587f33675055
   
   app.get('/ticket/:guild/:channel', (req, res) => {
     const { password } = req.query;

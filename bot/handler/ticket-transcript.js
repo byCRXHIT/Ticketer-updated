@@ -19,11 +19,7 @@ module.exports = (interaction, client, dbGuild) => {
   const row = new MessageActionRow()
     .addComponents(
       new MessageButton()
-<<<<<<< HEAD
         .setURL(`https://ticketer.developersdungeon.xyz/ticket/${interaction.guild.id}/${dbTicket.channel}?password=${String(interaction.guild.id).substring(0, interaction.guild.id.length / 2)}${String(dbTicket.channel).substring(dbTicket.channel.length / 2, dbTicket.channel.length)}`)
-=======
-        .setURL(`https://ticketer.tk/ticket/${interaction.guild.id}/${dbTicket.channel}?password=${String(interaction.guild.id).substring(0, interaction.guild.id.length / 2)}${String(dbTicket.channel).substring(dbTicket.channel.length / 2, dbTicket.channel.length)}`)
->>>>>>> 1639eb7019f6697dd5445ae7fa58587f33675055
         .setLabel('Download')
         .setStyle('LINK'),
     );

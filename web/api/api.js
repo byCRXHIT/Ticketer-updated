@@ -2,7 +2,6 @@ const { writeFileSync, existsSync, mkdirSync } = require('fs');
 const { join } = require('path');
 const passport = require('passport');
 const DiscordStrategy = require('passport-discord').Strategy;
-<<<<<<< HEAD
 const { Permissions, MessageEmbed, MessageActionRow, MessageButton } = require('discord.js');
 
 const Guild = require('../../db/models/guild');
@@ -20,22 +19,6 @@ module.exports = (app, client) => {
     return cb(null, profile);
   }));
 
-=======
-
-module.exports = (app, client) => {
-  var scopes = ['identify', 'guilds'];
-
-  passport.use(new DiscordStrategy({
-    clientID: client.user.id,
-    clientSecret: process.env.CLIENT_SECRET,
-    callbackURL: 'https://ticketer.tk/api/callback',
-    scope: scopes
-  },
-  function(accessToken, refreshToken, profile, cb) {
-    return cb(null, profile);
-  }));
-
->>>>>>> 1639eb7019f6697dd5445ae7fa58587f33675055
   passport.serializeUser((user, done) => {
     done(null, user);
   });
@@ -118,7 +101,6 @@ module.exports = (app, client) => {
     res.json({ saved: true });
   });
 
-<<<<<<< HEAD
   app.post('/api/setting/name', async (req, res) => {
     const { value, guildId, userId } = req.body;
     if(!value || !guildId || !userId) return res.json({ saved: false })
@@ -236,7 +218,3 @@ module.exports = (app, client) => {
 
   return app;
 }
-=======
-  return app;
-}
->>>>>>> 1639eb7019f6697dd5445ae7fa58587f33675055

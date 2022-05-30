@@ -23,13 +23,8 @@ body nav .title {
 
 body nav .title .logo {
     border-radius: 90%;
-<<<<<<< HEAD
     width: 33px;
     height: 33px;
-=======
-    width: 36px;
-    height: 36px;
->>>>>>> 1639eb7019f6697dd5445ae7fa58587f33675055
 }
 
 body nav .title .brand {
@@ -90,16 +85,11 @@ body nav .login .dropdown .text {
     background-color: #000000;
     color: #ffffff;
     text-decoration: none;
-<<<<<<< HEAD
     padding: 5px 22px;
-=======
-    padding: 7px 22px;
->>>>>>> 1639eb7019f6697dd5445ae7fa58587f33675055
     border-radius: 8px;
     font-weight: 600;
     transition: ease-in-out .2s;
     margin-right: 6px;
-<<<<<<< HEAD
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -110,9 +100,6 @@ body nav .login .dropdown .text img {
     height: 28px;
     margin-right: 10px;
     border-radius: 100%;
-=======
-    width: 150px;
->>>>>>> 1639eb7019f6697dd5445ae7fa58587f33675055
 }
 
 body nav .login .dropdown .text:hover {
@@ -133,11 +120,7 @@ body nav .login .dropdown .dropdown-content.active {
     position: absolute;
     margin-top: 10px;
     padding: 7px 22px;
-<<<<<<< HEAD
     width: 7.5%;
-=======
-    width: 103px;
->>>>>>> 1639eb7019f6697dd5445ae7fa58587f33675055
 }
 
 body nav .login .dropdown .dropdown-content.active .item {
@@ -146,11 +129,7 @@ body nav .login .dropdown .dropdown-content.active .item {
     padding: 5px 0px;
     background-color: transparent;
     border-radius: 8px;
-<<<<<<< HEAD
     width: 120%;
-=======
-    width: 130%;
->>>>>>> 1639eb7019f6697dd5445ae7fa58587f33675055
     text-align: center;
     transition: ease-in-out .1s;
 }
