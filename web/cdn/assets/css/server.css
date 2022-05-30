@@ -25,6 +25,7 @@ body::-webkit-scrollbar-thumb {
   
 body::-webkit-scrollbar-thumb:hover {
     background: #454FBF; 
+<<<<<<< HEAD
 }
 
 body .content {
@@ -75,4 +76,6 @@ body .chart .title {
     color: #ffffff;
     text-align: center;
     margin-bottom: 40px;
+=======
+>>>>>>> 1639eb7019f6697dd5445ae7fa58587f33675055
 }

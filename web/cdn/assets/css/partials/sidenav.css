@@ -5,6 +5,7 @@ body .sidenav {
     position: fixed;
     left: 0;
     top: 66px;
+<<<<<<< HEAD
     height: 93.3%;
     background-color: #121212;
     box-shadow: 2px 1px 8px 2px rgba(0,0,0,0.21);
@@ -82,4 +83,9 @@ body .sidenav .links .item.last {
 
 body .sidenav .links .item.last i {
     margin-right: 5px;
+=======
+    height: 100%;
+    background-color: #121212;
+    box-shadow: 2px 1px 8px 2px rgba(0,0,0,0.21);
+>>>>>>> 1639eb7019f6697dd5445ae7fa58587f33675055
 }

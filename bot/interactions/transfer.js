@@ -62,7 +62,11 @@ module.exports = {
                         .setFooter({ text: interaction.user.tag, iconURL: interaction.user.avatarURL({ dynamic: true }) });
                     
                       const transferMessageEmbed = new MessageEmbed()
+<<<<<<< HEAD
                         .setTitle(`> Claim ticket`)
+=======
+                        .setTitle(`> Ticket ${dbGuild.ticketid}`)
+>>>>>>> 1639eb7019f6697dd5445ae7fa58587f33675055
                         .setDescription(`This ticket has been transferred to ${user}. He will now help you with your problem.`)
                         .setFooter({ text: interaction.user.tag, iconURL: interaction.user.avatarURL({ dynamic: true }) });
                     

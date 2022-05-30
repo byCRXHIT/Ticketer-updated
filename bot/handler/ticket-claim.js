@@ -20,7 +20,11 @@ module.exports = (interaction, client, dbGuild) => {
         .setFooter({ text: interaction.user.tag, iconURL: interaction.user.avatarURL({ dynamic: true }) });
 
       const claimMessageEmbed = new MessageEmbed()
+<<<<<<< HEAD
         .setTitle(`> Ticket ${dbTicket.id}`)
+=======
+        .setTitle(`> Ticket ${dbGuild.ticketid}`)
+>>>>>>> 1639eb7019f6697dd5445ae7fa58587f33675055
         .setDescription(`Welcome to this ticket. Please describe your issue in detail while a Staff member can handle your ticket.\n\nReason: \`${dbTicket.reason}\`\n\nStaff: \`${interaction.user.tag}\``)
         .setFooter({ text: interaction.user.tag, iconURL: interaction.user.avatarURL({ dynamic: true }) });
   
