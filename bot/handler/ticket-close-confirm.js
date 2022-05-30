@@ -11,10 +11,15 @@ const { createTranscript } = require('../../functions/bot');
 module.exports = (interaction, client, dbGuild) => {
   const dbTicket = dbGuild.tickets[dbGuild.tickets.findIndex((t) => t.channel == interaction.channel.id)];
 
-  dbTicket.state = 'closed';
-  Guild.findOneAndUpdate({ id: interaction.guild.id }, { tickets: dbGuild.tickets }).catch();
+  try {
+    dbTicket.state = 'closed';
+    Guild.findOneAndUpdate({ id: interaction.guild.id }, { tickets: dbGuild.tickets }).catch();
+  } catch (e) {}
 
-  createTranscript(interaction.guild.id, dbTicket);
+  try {
+    createTranscript(interaction.guild.id, dbTicket);
+  } catch(e) {}
+
   const deleteEmbed = new MessageEmbed()
     .setTitle('> Delete Ticket')
     .setDescription('This ticket will be deleted in 10 seconds.')
@@ -28,7 +33,7 @@ module.exports = (interaction, client, dbGuild) => {
   const row = new MessageActionRow()
     .addComponents(
       new MessageButton()
-        .setURL(`https://ticketer.tk/ticket/${interaction.guild.id}/${interaction.channel.id}?password=${String(interaction.guild.id).substring(0, interaction.guild.id.length / 2)}${String(interaction.channel.id).substring(interaction.channel.id.length / 2, interaction.channel.id.length)}`)
+        .setURL(`https://ticketer.developersdungeon.xyz/ticket/${interaction.guild.id}/${interaction.channel.id}?password=${String(interaction.guild.id).substring(0, interaction.guild.id.length / 2)}${String(interaction.channel.id).substring(interaction.channel.id.length / 2, interaction.channel.id.length)}`)
         .setLabel('Download')
         .setStyle('LINK'),
     );
@@ -42,6 +47,10 @@ module.exports = (interaction, client, dbGuild) => {
   });
 
   setTimeout(() => {
-    interaction.channel.delete();
+    try {
+      interaction.channel.delete();
+    } catch (e) {
+      return
+    }
   }, 10000);
 };

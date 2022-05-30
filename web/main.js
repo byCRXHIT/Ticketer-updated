@@ -10,15 +10,18 @@ const middleware = require('./api/middleware');
 const app = express();
 
 /* Export */
-module.exports = () => {
+module.exports = (client) => {
   // Initialise middleware
-  middleware.initialize(app);
+  middleware.initialize(app, client);
 
   // Import api
-  middleware.api(app);
+  middleware.api(app, client);
 
   // Import web
-  middleware.web(app);
+  middleware.web(app, client);
+
+  // Import cdn
+  middleware.cdn(app);
 
   console.log(ChalkAdvanced.bgGreen(ChalkAdvanced.black(' [WEB] Website online ')));
 };

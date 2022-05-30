@@ -1,0 +1,92 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+body {
+    background-color: #111111;
+    top: 0;
+    left: 0;
+    margin: 0;
+    padding: 0;
+    width: 100vw;
+    font-family: 'Poppins', sans-serif;
+    overflow-x: hidden;
+    user-select: none;
+    display: flex;
+    flex-direction: column;
+}
+
+body::-webkit-scrollbar {
+    width: 8px;
+    background-color: #000000;
+    position: absolute;
+}
+   
+body::-webkit-scrollbar-thumb {
+    background: #5865F2; 
+    border-radius: 10px;
+}
+  
+body::-webkit-scrollbar-thumb:hover {
+    background: #454FBF; 
+}
+
+body .list {
+    display: flex; 
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    margin-top: 130px;
+    width: 100vw;
+}
+
+body .list .guild {
+    background-color: #181818;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 220px;
+    height: 220px;
+    margin: 0 10px;
+    padding: 20px;
+}
+
+body .list .guild .logo {
+    border-radius: 100%;
+    width: 102px;
+    height: 102px;
+}
+
+body .list .guild .name {
+    max-width: 100%;
+    text-overflow: ellipsis;
+    overflow: hidden; 
+    white-space: nowrap;
+    text-align: center;
+    color: #ffffff;
+    font-size: 1.2rem;
+    font-weight: 500;
+}
+
+body .list .guild .button {
+    width: 100%;
+    background-color: #5865F2;
+    text-align: center;
+    border-radius: 8px;
+    padding: 7px 0;
+    color: #ffffff;
+    text-decoration: none;
+    margin-top: 20px;
+    transition: ease-in-out .2s;
+}
+
+body .list .guild .button:hover {
+    background-color: #454FBF;
+}
+
+body .list .guild .button.invite {
+    background-color: #6A6A6A;
+}
+
+body .list .guild .button.invite:hover {
+    background-color: #5a5a5a;
+}

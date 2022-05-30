@@ -7,6 +7,7 @@ const Guild = require('../../db/models/guild');
 
 /* Export */
 module.exports = async (interaction, client, dbGuild) => {
+  if(interaction.member.roles.cache.has(dbGuild.settings.staff.role) || dbGuild.settings.staff.members.includes(interaction.user.id)) {
   const dbTicket = dbGuild.tickets[dbGuild.tickets.findIndex((t) => t.channel == interaction.channelId)];
 
   if (dbTicket.state == 'open') {
@@ -48,6 +49,14 @@ module.exports = async (interaction, client, dbGuild) => {
       .setTitle('> Lock ticket')
       .setDescription('This ticket ist not open nor closed. Is a deleting process running?')
       .setFooter({ text: interaction.user.tag, iconURL: interaction.user.avatarURL({ dynamic: true }) });
+
+    await interaction.reply({ embeds: [errorEmbed], ephemeral: true });
+  }
+  } else {
+    const errorEmbed = new MessageEmbed()
+    .setTitle('> Lock ticket')
+    .setDescription('You are not allowed to do lock/unlock tickets.')
+    .setFooter({ text: interaction.user.tag, iconURL: interaction.user.avatarURL({ dynamic: true }) });
 
     await interaction.reply({ embeds: [errorEmbed], ephemeral: true });
   }

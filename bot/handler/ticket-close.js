@@ -22,6 +22,11 @@ module.exports = (interaction, client, dbGuild) => {
         .setEmoji('977712715554488391')
         .setLabel('Cancel')
         .setStyle('DANGER'),
+      new MessageButton()
+        .setCustomId('ticket-feedback')
+        .setEmoji('👣')
+        .setLabel("Feedback")
+        .setStyle('SECONDARY')
     );
 
   interaction.reply({ embeds: [closeEmbed], ephemeral: false, components: [rowConfirm] });

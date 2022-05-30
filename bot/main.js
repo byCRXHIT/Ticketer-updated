@@ -13,18 +13,14 @@ const { staffCommands } = require('../config.json');
 const Guild = require('../db/models/guild');
 
 /* Export */
-module.exports = () => {
+module.exports = (client) => {
   // Create client
-  const client = new Client({
-    intents: [
-      Intents.FLAGS.GUILDS,
-      Intents.FLAGS.GUILD_MESSAGES,
-    ],
-  });
 
   // Wait for client to connect
   client.on('ready', () => {
     console.log(ChalkAdvanced.bgGreen(ChalkAdvanced.black(' [BOT] Bot is ready ')));
+    /* Initialize website */
+    require('../web/main')(client);
   });
 
   // Log in into client
@@ -43,7 +39,7 @@ module.exports = () => {
     console.log(ChalkAdvanced.bgBlue(ChalkAdvanced.black(` [BOT] Loaded interaction ${interaction.data.name} `)));
   });
 
-  const restClient = new REST({ version: '9' }).setToken(process.env.TOKEN);
+  const restClient = new REST({ version: '10' }).setToken(process.env.TOKEN);
 
   console.log(ChalkAdvanced.bgGreen(ChalkAdvanced.black(' [BOT] Loaded interactions ')));
 
@@ -54,7 +50,6 @@ module.exports = () => {
   client.on('interactionCreate', async (interaction) => {
     Guild.findOne({ id: interaction.guild.id }).then(async (dbGuild) => {
       if (!dbGuild) {
-        console.log(0);
         const g = new Guild({
           id: interaction.guild.id,
         });
@@ -119,4 +114,16 @@ module.exports = () => {
       }
     });
   });
+
+  // Guild join listener
+  client.on('guildCreate', (guild) => {
+    Guild.findOne({ id: message.guild.id }).then(async (dbGuild) => {
+      if(dbGuild) return;
+      const g = new Guild({
+        id: guild.id,
+      });
+  
+      g.save();
+    })
+  })
 };

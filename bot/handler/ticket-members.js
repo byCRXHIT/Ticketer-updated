@@ -10,7 +10,7 @@ module.exports = async (interaction, client, dbGuild) => {
 
   const modal = new discordModals.Modal()
     .setCustomId('ticket-members-add')
-    .setTitle('Add users')
+    .setTitle('Add user')
     .addComponents(
       new discordModals.TextInputComponent()
         .setCustomId('ticket-members-add-value')

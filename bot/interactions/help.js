@@ -18,14 +18,18 @@ module.exports = {
 
     const helpEmbed = new MessageEmbed()
       .setTitle('> Help')
-      .setDescription(`Here are some often used commands. Please keep in mind that you can see every command on our Website.\n\n__Commands__${helpMessage}\n\n__Support__\nFeel free to contact us on our Discord Server if you have any questions or suggestions.`)
+      .setDescription(`Here are some often used commands. Please keep in mind that you can see every command on our Website.\n\n__Commands__${helpMessage}\n\n__Support__\nFeel free to contact us on our Discord Server if you have any questions or suggestions.\n\n__Developers Dungeon__\nThis porject is part of [Developers Dungeon](https://developersdungeon.xyz/).`)
       .setFooter({ text: interaction.user.tag, iconURL: interaction.user.avatarURL({ dynamic: true }) });
 
     const row = new MessageActionRow()
       .addComponents(
         new MessageButton()
+          .setLabel('Discord')
+          .setURL('https://discord.gg/NqDGtcB8Zt')
+          .setStyle('LINK'),
+          new MessageButton()
           .setLabel('Invite')
-          .setURL('https://discord.gg/fjQyQZ')
+          .setURL('https://discord.com/oauth2/authorize?client_id=977591057711792178&permissions=139855260752&scope=bot%20applications.commands')
           .setStyle('LINK'),
       );
 

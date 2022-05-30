@@ -5,7 +5,7 @@ const MoongoStore = require('connect-mongo');
 const cors = require('cors');
 
 /* Functions */
-const initialize = (app) => {
+const initialize = (app, v) => {
   // Set port
   app.listen(7080);
 
@@ -20,6 +20,7 @@ const initialize = (app) => {
     cookie: { secure: true },
     saveUninitialized: false,
     secret: 'This is a secret!',
+    session: true,
     store: MoongoStore.create({
       mongoUrl: process.env.DATABASE_URI,
     }),
@@ -37,23 +38,31 @@ const initialize = (app) => {
   return app;
 };
 
-const api = (app) => {
+const api = (app, client) => {
   // Import api
-  app.use('/api', require('./api'));
+  require('./api')(app, client);
 
   return app;
 };
 
-const web = (app) => {
+const web = (app, client) => {
   // Import web
-  app.use('/', require('./views'));
+  require('./views')(app, client);
 
   return app;
 };
+
+const cdn = (app) => {
+  // Import cdn
+  require('./cdn')(app);
+
+  return app;
+}
 
 /* Export */
 module.exports = {
   initialize,
   api,
   web,
+  cdn,
 };

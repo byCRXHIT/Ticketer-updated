@@ -45,7 +45,7 @@ module.exports = {
             new MessageButton()
               .setDisabled(false)
               .setLabel('Dashboard')
-              .setURL(`https://ticketer.tk/dashboard/${interaction.guild.id}`)
+              .setURL(`https://ticketer.developersdungeon.xyz/dashboard/${interaction.guild.id}`)
               .setStyle('LINK'),
           );
 

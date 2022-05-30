@@ -5,6 +5,14 @@ const {
 
 /* Export */
 module.exports = async (interaction, client, dbGuild) => {
+  if(dbGuild.tickets.filter(t => t.creator == interaction.user.id && t.state !== 'closed').length >= Number(dbGuild.settings.maxtickets)) {
+    const errorEmbed = new MessageEmbed()
+      .setTitle('> Error')
+      .setDescription('You have reached the maximum number of tickets at once on this guild.')
+      .setFooter({ text: interaction.user.tag, iconURL: interaction.user.avatarURL({ dynamic: true }) });
+
+    return interaction.reply({ embeds: [errorEmbed], ephemeral: true });
+  }
   const createEmbed = new MessageEmbed()
     .setTitle('> Create Ticket')
     .setDescription('Please specify the reason for your ticket.')

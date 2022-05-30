@@ -1,0 +1,35 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Ticketer - Easily manage users' concerns</title>
+    <meta name="keywords" content="ticketer, ticketer.developersdungeon.xyz, ticket, discord ticket, discord ticket bot, ticket bot, discord, ticket discord">
+    <meta name="description" content="With ticketer you can easily manage the concerns of your server members at any time. Very uncomplicated and with many possibilities!">
+    <meta name="author" content="Developer Dungeon Studiosngeon Studios">
+
+    <link rel="stylesheet" href="/assets/css/dashboard.css">
+    <link rel="stylesheet" href="/assets/css/partials/navbar.css">
+    <link href='https://unpkg.com/boxicons@2.1.2/css/boxicons.min.css' rel='stylesheet'>
+</head>
+<body>
+    <%- include('./partials/navbar.ejs') %>
+
+    <div class="list">
+        <% guilds.forEach((guild) => { %>
+            <div class="guild <%= guild.joined %>">
+                <img src="<%= guild.icon %>" alt="Logo" class="logo">
+                <h2 class="name"><%= guild.name %></h2>
+                <% if(guild.joined) { %>
+                    <a href="/dashboard/<%= guild.id %>" class="button">Dashboard</a>
+                <% } else { %>
+                    <a href="https://discord.com/api/oauth2/authorize?client_id=977591057711792178&permissions=139855260752&redirect_uri=https%3A%2F%2Fticketer.developersdungeon.xyz%2Fdashboard&response_type=code&scope=bot%20applications.commands%20guilds&guild_id=<%= guild.id %>" class="button invite">Invite</a>
+                <% } %>
+            </div>
+        <% }) %>
+    </div>
+
+    <script src="/assets/js/partials/navbar.js"></script>
+</body>
+</html>

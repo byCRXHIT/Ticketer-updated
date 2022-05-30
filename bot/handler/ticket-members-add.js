@@ -19,7 +19,7 @@ module.exports = async (interaction, client, dbGuild) => {
       .setDescription('The user you specified was not found.')
       .setFooter({ text: interaction.user.tag, iconURL: interaction.user.avatarURL({ dynamic: true }) });
 
-    return interaction.reply({ embeds: [errorEmbed], ephemeral: true });
+    return interaction.channel.send({ embeds: [errorEmbed], ephemeral: true });
   }
   if (dbTicket.members.findIndex((m) => m.id == value) == -1) {
     dbTicket.members.push({ id: user.user.id, name: user.user.tag });
@@ -33,13 +33,17 @@ module.exports = async (interaction, client, dbGuild) => {
       .setDescription(`The user <@!${value}> has been added to this ticket.`)
       .setFooter({ text: interaction.user.tag, iconURL: interaction.user.avatarURL({ dynamic: true }) });
 
-    await interaction.reply({ embeds: [addEmbed], ephemeral: true });
+      interaction.deferReply();
+      interaction.deleteReply();
+    await interaction.channel.send({ embeds: [addEmbed], ephemeral: true });
   } else {
     const addEmbed = new MessageEmbed()
       .setTitle('> Add user')
       .setDescription(`The user <@!${value}> is already in this ticket.`)
       .setFooter({ text: interaction.user.tag, iconURL: interaction.user.avatarURL({ dynamic: true }) });
 
-    await interaction.reply({ embeds: [addEmbed], ephemeral: true });
+      interaction.deferReply();
+      interaction.deleteReply();
+    await interaction.channel.send({ embeds: [addEmbed], ephemeral: true });
   }
 };

@@ -11,8 +11,12 @@ module.exports = async (interaction, client, dbGuild) => {
     .setDescription('Your ticket will be created')
     .setFooter({ text: interaction.user.tag, iconURL: interaction.user.avatarURL({ dynamic: true }) });
 
-  interaction.reply({ embeds: [waitEmbed], ephemeral: true });
-  const ticket = await interaction.guild.channels.create(dbGuild.nameprefix.replace('{id}', dbGuild.ticketid), {
+  try {
+    interaction.reply({ embeds: [waitEmbed], ephemeral: true });
+  } catch (e) {
+    return
+  }
+  const ticket = await interaction.guild.channels.create(dbGuild.settings.nameprefix.replace('{id}', dbGuild.ticketid), {
     type: 'text',
     permissionOverwrites: [
       { id: interaction.user.id, allow: ['VIEW_CHANNEL', 'READ_MESSAGE_HISTORY', 'SEND_MESSAGES'], deny: [] },
@@ -20,9 +24,13 @@ module.exports = async (interaction, client, dbGuild) => {
     ],
   });
 
+  try {
+    await ticket.setParent(dbGuild.settings.category);
+  } catch (e) {}
+
   const ticketEmbed = new MessageEmbed()
     .setTitle(`> Ticket ${dbGuild.ticketid}`)
-    .setDescription(`Welcome to this ticket. Please describe your issue in detail while a Staff member can handle your ticket.\n\nReason: \`${reason}\`\n\nUser: \`${interaction.user.tag}\``)
+    .setDescription(`Welcome to this ticket. Please describe your issue in detail while a Staff member can handle your ticket.\n\nReason: \`${reason}\`\n\nStaff: \`none\``)
     .setFooter({ text: interaction.user.tag, iconURL: interaction.user.avatarURL({ dynamic: true }) });
 
   const row = new MessageActionRow()
@@ -67,7 +75,11 @@ module.exports = async (interaction, client, dbGuild) => {
     .setDescription(`The ticket ${ticket} was successfully created`)
     .setFooter({ text: interaction.user.tag, iconURL: interaction.user.avatarURL({ dynamic: true }) });
 
+  try {
   interaction.editReply({ embeds: [successEmbed], ephemeral: true });
+  } catch (e) {
+    return
+  }
 
   dbGuild.ticketid += 1;
   dbGuild.save();
