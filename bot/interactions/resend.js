@@ -37,10 +37,12 @@ module.exports = {
 
         interaction.deferReply();
         interaction.deleteReply();
-        const msg = await interaction.channel.messages.fetch(
-          dbGuild.settings.message
-        );
-        msg.delete();
+        try {
+          const msg = await interaction.channel.messages.fetch(
+            dbGuild.settings.message
+          );
+          msg.delete();
+        } catch (e) {}
 
         const message = await interaction.channel.send({
           embeds: [helpEmbed],

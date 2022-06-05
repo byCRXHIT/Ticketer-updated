@@ -21,17 +21,17 @@ module.exports = (client) => {
   // Wait for client to connect
   client.on('ready', async () => {
     Guild.find()
-      const guilds = await Guild.find();
-      let ticketCount = 0;
 
     console.log(ChalkAdvanced.bgGreen(ChalkAdvanced.black(' [BOT] Bot is ready ')));
 
     setInterval(async () => {
+      const guilds = await Guild.find();
+      let ticketCount = 0;
       await guilds.forEach(g => {
         ticketCount += g.tickets.length;
       })
       client.user.setActivity(`${ticketCount} total tickets`, { type: "WATCHING" });
-    }, 60000)
+    }, 42000)
     client.user.setStatus("online");
 
     /* Initialize website */
@@ -61,12 +61,18 @@ module.exports = (client) => {
   restClient.put(Routes.applicationGuildCommands(process.env.CLIENT_ID, process.env.DEVGUILD_ID), { body: interactions })
     .catch(console.error);
 
+  restClient.put(
+      Routes.applicationCommands(process.env.CLIENT_ID),
+      { body: interactions },
+    );
+
   // Listen for slash commands
   client.on('interactionCreate', async (interaction) => {
     Guild.findOne({ id: interaction.guild.id }).then(async (dbGuild) => {
       if (!dbGuild) {
         const g = new Guild({
           id: interaction.guild.id,
+          botJoined: (Date.now() / 1000) | 0,
         });
 
         g.save();
