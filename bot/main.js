@@ -13,12 +13,27 @@ const { staffCommands } = require('../config.json');
 const Guild = require('../db/models/guild');
 
 /* Export */
+
 module.exports = (client) => {
+
   // Create client
 
   // Wait for client to connect
-  client.on('ready', () => {
+  client.on('ready', async () => {
+    Guild.find()
+      const guilds = await Guild.find();
+      let ticketCount = 0;
+
     console.log(ChalkAdvanced.bgGreen(ChalkAdvanced.black(' [BOT] Bot is ready ')));
+
+    setInterval(async () => {
+      await guilds.forEach(g => {
+        ticketCount += g.tickets.length;
+      })
+      client.user.setActivity(`${ticketCount} total tickets`, { type: "WATCHING" });
+    }, 60000)
+    client.user.setStatus("online");
+
     /* Initialize website */
     require('../web/main')(client);
   });
@@ -115,12 +130,13 @@ module.exports = (client) => {
     });
   });
 
-  // Guild join listener
+  // Shit code
   client.on('guildCreate', (guild) => {
-    Guild.findOne({ id: message.guild.id }).then(async (dbGuild) => {
+    Guild.findOne({ id: guild.id }).then(async (dbGuild) => {
       if(dbGuild) return;
       const g = new Guild({
         id: guild.id,
+        botJoined: (Date.now() / 1000) | 0,
       });
   
       g.save();

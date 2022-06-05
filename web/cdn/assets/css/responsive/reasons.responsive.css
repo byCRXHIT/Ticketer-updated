@@ -1,0 +1,17 @@
+@media screen and (max-width: 715px) {
+    body {
+        overflow: hidden;
+    }
+
+    body .content .pc-only {
+        display: flex;
+    }
+
+    body .content .table {
+        display: none;
+    }
+
+    body .content .button {
+        display: none;
+    }
+}

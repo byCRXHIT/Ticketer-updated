@@ -1,0 +1,18 @@
+@media screen and (min-width: 1015px) {
+    body .content .setting .description .lb {
+        content: " ";
+        display: none;
+    }
+}
+
+@media screen and (max-width: 1015px) {
+    body .content .setting .description .lb {
+        content: unset;
+    }
+}
+
+@media screen and (max-width: 900px) {
+    body .content {
+        margin-left: 65px !important;
+    }
+}

@@ -22,29 +22,33 @@ module.exports = (interaction, client, dbGuild) => {
 
   const deleteEmbed = new MessageEmbed()
     .setTitle('> Delete Ticket')
+    .setColor("BLURPLE")
     .setDescription('This ticket will be deleted in 10 seconds.')
     .setFooter({ text: interaction.user.tag, iconURL: interaction.user.avatarURL({ dynamic: true }) });
 
-  const transcriptEmbed = new MessageEmbed()
-    .setTitle('> Ticket transcript')
-    .setDescription('This is the transcript of this ticket.')
-    .setFooter({ text: interaction.user.tag, iconURL: interaction.user.avatarURL({ dynamic: true }) });
-
-  const row = new MessageActionRow()
-    .addComponents(
-      new MessageButton()
-        .setURL(`https://ticketer.developersdungeon.xyz/ticket/${interaction.guild.id}/${interaction.channel.id}?password=${String(interaction.guild.id).substring(0, interaction.guild.id.length / 2)}${String(interaction.channel.id).substring(interaction.channel.id.length / 2, interaction.channel.id.length)}`)
-        .setLabel('Download')
-        .setStyle('LINK'),
-    );
-
   interaction.channel.messages.cache.get(interaction.message.id).delete();
   interaction.channel.send({ embeds: [deleteEmbed], ephemeral: false });
-  interaction.channel.send({
-    embeds: [transcriptEmbed],
-    ephemeral: false,
-    components: [row],
-  });
+  if(dbGuild.settings.transcript.enabled) {
+    const transcriptEmbed = new MessageEmbed()
+      .setTitle('> Ticket transcript')
+      .setColor("BLURPLE")
+      .setDescription('This is the transcript of this ticket.')
+      .setFooter({ text: interaction.user.tag, iconURL: interaction.user.avatarURL({ dynamic: true }) });
+  
+    const row = new MessageActionRow()
+      .addComponents(
+        new MessageButton()
+          .setURL(`https://ticketer.developersdungeon.xyz/ticket/${interaction.guild.id}/${interaction.channel.id}?password=${String(interaction.guild.id).substring(0, interaction.guild.id.length / 2)}${String(interaction.channel.id).substring(interaction.channel.id.length / 2, interaction.channel.id.length)}`)
+          .setLabel('Download')
+          .setStyle('LINK'),
+      );
+
+      interaction.channel.send({
+        embeds: [transcriptEmbed],
+        ephemeral: false,
+        components: [row],
+      });
+    }
 
   setTimeout(() => {
     try {

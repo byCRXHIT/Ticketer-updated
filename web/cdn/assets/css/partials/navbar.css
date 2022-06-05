@@ -5,6 +5,7 @@ body nav {
     flex-direction: row;
     color: #ffffff;
     font-family: 'Poppins', sans-serif;
+    font-display: swap;
     align-items: center;
     padding: 14px 0;
     background-color: #0A0A0A;
@@ -12,6 +13,7 @@ body nav {
     position: fixed;
     top: 0;
     user-select: none;
+    z-index: 99999;
 }
 
 body nav .title {
@@ -19,6 +21,13 @@ body nav .title {
     flex-direction: row;
     align-items: center;
     margin-left: 16px;
+    transition: ease-in-out .2s;
+    cursor: pointer;
+}
+
+body nav .title:hover {
+    transition: ease-in-out .2s;
+    opacity: .8;
 }
 
 body nav .title .logo {
@@ -42,6 +51,7 @@ body nav .links .link {
     color: #ffffff;
     text-decoration: none;
     font-size: 1.1rem;
+    font-display: swap;
     transition: ease-in-out .1s;
     display: flex;
     flex-direction: row;
@@ -73,6 +83,7 @@ body nav .login .button {
     padding: 7px 22px;
     border-radius: 8px;
     font-weight: 600;
+    font-display: swap;
     transition: ease-in-out .2s;
     margin-right: 6px;
 }
@@ -88,11 +99,13 @@ body nav .login .dropdown .text {
     padding: 5px 22px;
     border-radius: 8px;
     font-weight: 600;
+    font-display: swap;
     transition: ease-in-out .2s;
     margin-right: 6px;
     display: flex;
     flex-direction: row;
     align-items: center;
+    z-index: 99999;
 }
 
 body nav .login .dropdown .text img {
@@ -108,6 +121,7 @@ body nav .login .dropdown .text:hover {
 
 body nav .login .dropdown .dropdown-content {
     display: none;
+    z-index: 99999;
 }
 
 body nav .login .dropdown .dropdown-content.active {
@@ -120,7 +134,8 @@ body nav .login .dropdown .dropdown-content.active {
     position: absolute;
     margin-top: 10px;
     padding: 7px 22px;
-    width: 7.5%;
+    width: auto;
+    z-index: 99999;
 }
 
 body nav .login .dropdown .dropdown-content.active .item {
@@ -132,6 +147,7 @@ body nav .login .dropdown .dropdown-content.active .item {
     width: 120%;
     text-align: center;
     transition: ease-in-out .1s;
+    z-index: 99999;
 }
 
 body nav .login .dropdown .dropdown-content.active .item:not(:first-child) {
@@ -144,6 +160,12 @@ body nav .login .dropdown .dropdown-content.active .item:hover {
 
 body nav .login .dropdown .dropdown-content.active .item.red:hover {
     background-color: #d33b3e;
+}
+
+body nav .icon {
+    display: block;
+    margin-right: 20px;
+    font-size: 1.7rem;
 }
 
 @keyframes dropin {
@@ -174,4 +196,109 @@ body nav .login .dropdown .dropdown-content.active .item.red:hover {
         visibility: visible;
         opacity: 0;
     }
+}
+
+body.hd .present, body.hd svg, body.hd .features, body.hd footer, body.hd .list {
+    display: none;
+}
+
+body .nav-window {
+    width: 100vw;
+    height: 100vh;
+    background-color: #0A0A0A;
+    position: absolute;
+    top: 0;
+    display: none;
+    margin-top: 0;
+    z-index: 999;
+}
+
+body.hd .nav-window {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    align-items: center;
+    color: #ffffff;
+}
+
+@keyframes navin {
+    0% {
+        margin-top: -5px;
+        display: flex;
+        visibility: visible;
+        opacity: 0;
+    }
+    100% {
+        margin-top: 0px;
+        display: flex;
+        visibility: visible;
+        opacity: 1;
+    }
 } 
+
+@keyframes navout {
+    0% {
+        margin-top: 0px;
+        display: flex;
+        visibility: visible;
+        opacity: 1;
+    }
+    100% {
+        margin-top: -5px;
+        display: flex;
+        visibility: visible;
+        opacity: 0;
+    }
+}
+
+body.hd .nav-window .item {
+    color: #ffffff;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    text-decoration: none;
+    font-size: 1.2rem;
+}
+
+body.hd .nav-window .item i {
+    margin-right: 3px;
+}
+
+body.hd .nav-window .text {
+    color: #ffffff;
+    font-size: 1.2rem;
+    font-weight: 600;
+}
+
+@media screen and (min-width: 800px) {
+    body nav .icon {
+        display: none;
+    }
+
+    body nav .links {
+        display: flex;
+    }
+
+    body nav .login {
+        display: block;
+    }
+
+    body .nav-window {
+        display: none;
+    }
+}
+
+@media screen and (max-width: 800px) {
+    body nav .icon {
+        display: block;
+    }
+
+    body nav .links {
+        display: none;
+    }
+
+    body nav .login {
+        display: none;
+    }
+}

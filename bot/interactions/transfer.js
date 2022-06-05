@@ -19,6 +19,7 @@ module.exports = {
         if(!dbTicket) {
             const errorEmbed = new MessageEmbed()
                 .setTitle('> Transfer ticket')
+                .setColor("RED")
                 .setDescription('This ticket does not exist.')
                 .setFooter({ text: interaction.user.tag, iconURL: interaction.user.avatarURL({ dynamic: true }) });
         
@@ -32,7 +33,9 @@ module.exports = {
                  if (dbTicket.claimed == 'none') {
                   const errorEmbed = new MessageEmbed()
                     .setTitle('> Transfer ticket')
+                    .setColor("RED")
                     .setDescription('This ticket is not claimed yet.')
+                    .setTimestamp()
                     .setFooter({ text: interaction.user.tag, iconURL: interaction.user.avatarURL({ dynamic: true }) });
                 
                   return interaction.reply({ embeds: [errorEmbed], ephemeral: true });
@@ -40,6 +43,7 @@ module.exports = {
                     if(!user.roles.cache.has(dbGuild.settings.staff.role) && !dbGuild.settings.staff.members.includes(user.id)) {
                       const errorEmbed = new MessageEmbed()
                         .setTitle('> Transfer ticket')
+                        .setColor("RED")
                         .setDescription('The user you specified is not a staff member.')
                         .setFooter({ text: interaction.user.tag, iconURL: interaction.user.avatarURL({ dynamic: true }) });
                     
@@ -47,7 +51,9 @@ module.exports = {
                     } else if(user.id == dbTicket.claimed) {
                       const errorEmbed = new MessageEmbed()
                         .setTitle('> Transfer ticket')
+                        .setColor("RED")
                         .setDescription('This ticket is already claimed by this user.')
+                        .setTimestamp()
                         .setFooter({ text: interaction.user.tag, iconURL: interaction.user.avatarURL({ dynamic: true }) });
                     
                       return interaction.reply({ embeds: [errorEmbed], ephemeral: true });
@@ -58,11 +64,15 @@ module.exports = {
                     
                       const transferEmbed = new MessageEmbed()
                         .setTitle('> Transfer ticket')
+                        .setColor("BLURPLE")
                         .setDescription(`You transfered the ticket to ${user}`)
+                        .setTimestamp()
                         .setFooter({ text: interaction.user.tag, iconURL: interaction.user.avatarURL({ dynamic: true }) });
                     
                       const transferMessageEmbed = new MessageEmbed()
                         .setTitle(`> Claim ticket`)
+                        .setColor("BLURPLE")
+                        .setTimestamp()
                         .setDescription(`This ticket has been transferred to ${user}. He will now help you with your problem.`)
                         .setFooter({ text: interaction.user.tag, iconURL: interaction.user.avatarURL({ dynamic: true }) });
                     
@@ -74,7 +84,9 @@ module.exports = {
                 if(dbTicket.claimed == interaction.user.id) {
                     const errorEmbed = new MessageEmbed()
                         .setTitle('> Transfer ticket')
+                        .setColor("RED")
                         .setDescription('You cannot transfer your own ticket to yourself.')
+                        .setTimestamp()
                         .setFooter({ text: interaction.user.tag, iconURL: interaction.user.avatarURL({ dynamic: true }) });
                     
                     return interaction.reply({ embeds: [errorEmbed], ephemeral: true });
@@ -86,11 +98,14 @@ module.exports = {
               
                 const transferEmbed = new MessageEmbed()
                   .setTitle('> Transfer ticket')
+                  .setColor("BLURPLE")
                   .setDescription(`You transfered the ticket to yourself.`)
                   .setFooter({ text: interaction.user.tag, iconURL: interaction.user.avatarURL({ dynamic: true }) });
               
                 const transferMessageEmbed = new MessageEmbed()
                   .setTitle(`> Ticket ${dbGuild.ticketid}`)
+                  .setColor("BLURPLE")
+                  .setTimestamp()
                   .setDescription(`This ticket has been transferred to ${interaction.user}. He will now help you with your problem.`)
                   .setFooter({ text: interaction.user.tag, iconURL: interaction.user.avatarURL({ dynamic: true }) });
               
@@ -100,6 +115,8 @@ module.exports = {
         } else {
             const errorEmbed = new MessageEmbed()
                 .setTitle('> Transfer ticket')
+                .setColor("RED")
+                .setTimestamp()
                 .setDescription('You are not a staff member of this guild.')
                 .setFooter({ text: interaction.user.tag, iconURL: interaction.user.avatarURL({ dynamic: true }) });
 

@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -10,9 +11,11 @@
     <meta name="author" content="Finn Kötting">
 
     <link rel="stylesheet" href="/assets/css/server.css">
+    <link rel="stylesheet" href="/assets/css/responsive/server.responsive.css">
     <link rel="stylesheet" href="/assets/css/partials/navbar.css">
     <link rel="stylesheet" href="/assets/css/partials/sidenav.css">
     <link href='https://unpkg.com/boxicons@2.1.2/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="shortcut icon" href="/assets/img/logo-round.webp" type="image/x-icon">
 </head>
 <body>
     <%- include('./partials/navbar.ejs') %>
@@ -29,18 +32,27 @@
             <p class="title">Settings</p>
             <a href="/dashboard/<%= guild.id %>/settings" class="item"><i class='bx bx-cog' ></i> General</a>
             <a href="/dashboard/<%= guild.id %>/settings/reasons" class="item"><i class='bx bx-message-dots' ></i> Reasons</a>
-            <a href="/dashboard/<%= guild.id %>/settings/transcripts" class="item"><i class='bx bx-box' ></i> Transcripts</a>
-            <a href="/dashboard/<%= guild.id %>/settings/permisions" class="item"><i class='bx bx-box' ></i> Permissions</a>
+            <a href="/dashboard/<%= guild.id %>/settings/permissions" class="item"><i class='bx bx-error' ></i> Permissions</a>
+            <a href="/dashboard/<%= guild.id %>/settings/transcripts" class="item"><i class='bx bx-box' ></i> Logs</a>
 
             <a href="/dashboard/" class="item last"><i class='bx bx-left-arrow-alt'></i> Server list</a>
         </div>
+    </div>
+    <div class="sidenav-small">
+        <a href="/dashboard/<%= guild.id %>" class="item active"><i class='bx bx-stats' ></i></a>
+        <a href="/dashboard/<%= guild.id %>/tickets" class="item"><i class='bx bx-conversation' ></i></a>
+        <a href="/dashboard/<%= guild.id %>/staff" class="item"><i class='bx bx-box' ></i></a>
+        <a href="/dashboard/<%= guild.id %>/settings" class="item"><i class='bx bx-cog' ></i></a>
+        <a href="/dashboard/<%= guild.id %>/settings/reasons" class="item"><i class='bx bx-message-dots' ></i></a>
+        <a href="/dashboard/<%= guild.id %>/settings/permissions" class="item"><i class='bx bx-error' ></i></a>
+        <a href="/dashboard/<%= guild.id %>/settings/transcripts" class="item"><i class='bx bx-box' ></i></a>
     </div>
 
     <div class="content">
         <div class="container">
             <div class="item">
                 <p class="title">Total tickets</p>
-                <p class="value"><%= db.ticketid - 1 %></p>
+                <p class="value"><%= db.tickets.length %></p>
             </div>
             <div class="item">
                 <p class="title">Current tickets</p>

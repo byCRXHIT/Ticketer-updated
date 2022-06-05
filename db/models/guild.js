@@ -10,9 +10,14 @@ const guildSchema = new Schema({
     type: Array,
     default: [{
       label: 'No reason provided',
-      description: 'This guild has not been set up yet. Please contact the administrator of this guild.',
+      description: 'This reason has no further description.',
       value: '0',
+      permissions: 'none'
     }],
+  },
+  botJoined: {
+    type: Number,
+    required: true,
   },
   settings: {
     staff: {
@@ -22,10 +27,16 @@ const guildSchema = new Schema({
     transcript: {
       type: { type: String, default: 'simple' },
       enabled: { type: Boolean, default: false },
+      channel: { type: String, default: 'none' }
     },
     messages: {
       create: { type: String, default: 'To create a ticket please use the button below.' },
     },
+    permissions: {
+      blacklist: { type: Array, default: [] },
+      
+    },
+    log: { type: String, default: 'none' },
     channel: { type: String, default: 'none' },
     category: { type: String, default: 'none' },
     nameprefix: { type: String, default: 'ticket-{id}' },

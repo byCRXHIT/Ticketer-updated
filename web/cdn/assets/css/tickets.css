@@ -8,6 +8,7 @@ body {
     padding: 0;
     width: 100vw;
     font-family: 'Poppins', sans-serif;
+    font-display: swap;
     overflow-x: hidden;
     user-select: none;
 }
@@ -72,4 +73,24 @@ body .content .table .link {
 
 body .content .table .link:hover {
     color: #d3d3d3;
+}
+
+body .content .pc-only {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    margin-top: 100px;
+}
+
+body .content .pc-only .title {
+    color: #ffffff;
+    margin: 0;
+}
+
+body .content .pc-only .description {
+    color: #ffffff;
+    margin: 10px 0;
+    width: 80%;
 }

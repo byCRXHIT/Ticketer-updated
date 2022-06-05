@@ -8,6 +8,7 @@ const Guild = require('../../db/models/guild');
 
 /* Export */
 module.exports = async (interaction, client, dbGuild) => {
+  // return;
   const value = interaction.getTextInputValue('ticket-members-add-value');
   const dbTicket = dbGuild.tickets[dbGuild.tickets.findIndex((t) => t.channel == interaction.channelId)];
 
@@ -16,6 +17,7 @@ module.exports = async (interaction, client, dbGuild) => {
   if (!/^[0-9]*$/.test(value) || !user) {
     const errorEmbed = new MessageEmbed()
       .setTitle('> Add user')
+      .setColor("RED")
       .setDescription('The user you specified was not found.')
       .setFooter({ text: interaction.user.tag, iconURL: interaction.user.avatarURL({ dynamic: true }) });
 
@@ -30,6 +32,7 @@ module.exports = async (interaction, client, dbGuild) => {
 
     const addEmbed = new MessageEmbed()
       .setTitle('> Add user')
+      .setColor("BLURPLE")
       .setDescription(`The user <@!${value}> has been added to this ticket.`)
       .setFooter({ text: interaction.user.tag, iconURL: interaction.user.avatarURL({ dynamic: true }) });
 
@@ -39,6 +42,7 @@ module.exports = async (interaction, client, dbGuild) => {
   } else {
     const addEmbed = new MessageEmbed()
       .setTitle('> Add user')
+      .setColor("RED")
       .setDescription(`The user <@!${value}> is already in this ticket.`)
       .setFooter({ text: interaction.user.tag, iconURL: interaction.user.avatarURL({ dynamic: true }) });
 

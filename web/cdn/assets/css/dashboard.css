@@ -8,6 +8,7 @@ body {
     padding: 0;
     width: 100vw;
     font-family: 'Poppins', sans-serif;
+    font-display: swap;
     overflow-x: hidden;
     user-select: none;
     display: flex;
@@ -34,8 +35,9 @@ body .list {
     flex-direction: row;
     align-items: center;
     justify-content: center;
-    margin-top: 130px;
+    margin-top: 100px;
     width: 100vw;
+    flex-wrap: wrap;
 }
 
 body .list .guild {
@@ -48,6 +50,7 @@ body .list .guild {
     height: 220px;
     margin: 0 10px;
     padding: 20px;
+    margin-top: 30px;
 }
 
 body .list .guild .logo {
@@ -64,6 +67,7 @@ body .list .guild .name {
     text-align: center;
     color: #ffffff;
     font-size: 1.2rem;
+    font-display: swap;
     font-weight: 500;
 }
 

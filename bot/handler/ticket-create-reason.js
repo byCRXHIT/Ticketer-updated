@@ -8,8 +8,47 @@ module.exports = async (interaction, client, dbGuild) => {
   const reason = dbGuild.options[Number(interaction.values[0])].label;
   const waitEmbed = new MessageEmbed()
     .setTitle('> Please wait')
+    .setColor("BLURPLE")
     .setDescription('Your ticket will be created')
     .setFooter({ text: interaction.user.tag, iconURL: interaction.user.avatarURL({ dynamic: true }) });
+
+  let permissions = [
+    { id: client.user.id, allow: ['VIEW_CHANNEL', 'READ_MESSAGE_HISTORY', 'SEND_MESSAGES', 'MANAGE_MESSAGES'], deny: [] },
+    { id: interaction.member.id, allow: ['VIEW_CHANNEL', 'READ_MESSAGE_HISTORY', 'SEND_MESSAGES'], deny: [] },
+    { id: interaction.guild.roles.everyone, deny: ['VIEW_CHANNEL'] },
+  ]
+
+  if(dbGuild.options[Number(interaction.values[0])].permissions !== 'none') {
+    permissions.push({
+      id: dbGuild.options[Number(interaction.values[0])].permissions,
+      allow: ['VIEW_CHANNEL', 'READ_MESSAGE_HISTORY', 'SEND_MESSAGES', 'MANAGE_MESSAGES'],
+      deny: []
+    })
+  } else {
+    if(dbGuild.settings.staff.role !== 'none') {
+      permissions.push({
+        id: dbGuild.settings.staff.role,
+        allow: ['VIEW_CHANNEL', 'READ_MESSAGE_HISTORY', 'SEND_MESSAGES', 'MANAGE_MESSAGES'],
+        deny: []
+      })
+    }
+
+    dbGuild.settings.staff.members.forEach((staff) => {
+      permissions.push({
+        id: staff,
+        allow: ['VIEW_CHANNEL', 'READ_MESSAGE_HISTORY', 'SEND_MESSAGES', 'MANAGE_MESSAGES'],
+        deny: []
+      })
+    })
+  }
+
+  if(dbGuild.settings.staff.role !== 'none') {
+    permissions.push({
+      id: dbGuild.settings.staff.role,
+      allow: ['VIEW_CHANNEL', 'READ_MESSAGE_HISTORY', 'SEND_MESSAGES', 'MANAGE_MESSAGES'],
+      deny: []
+    })
+  }
 
   try {
     interaction.reply({ embeds: [waitEmbed], ephemeral: true });
@@ -18,10 +57,8 @@ module.exports = async (interaction, client, dbGuild) => {
   }
   const ticket = await interaction.guild.channels.create(dbGuild.settings.nameprefix.replace('{id}', dbGuild.ticketid), {
     type: 'text',
-    permissionOverwrites: [
-      { id: interaction.user.id, allow: ['VIEW_CHANNEL', 'READ_MESSAGE_HISTORY', 'SEND_MESSAGES'], deny: [] },
-      { id: interaction.guild.roles.everyone, deny: ['VIEW_CHANNEL'] },
-    ],
+    permissionOverwrites: permissions,
+    parent: dbGuild.settings.category
   });
 
   try {
@@ -30,8 +67,11 @@ module.exports = async (interaction, client, dbGuild) => {
 
   const ticketEmbed = new MessageEmbed()
     .setTitle(`> Ticket ${dbGuild.ticketid}`)
-    .setDescription(`Welcome to this ticket. Please describe your issue in detail while a Staff member can handle your ticket.\n\nReason: \`${reason}\`\n\nStaff: \`none\``)
+    .setColor("BLURPLE")
+    .setDescription(`Welcome to this ticket. Please describe your issue in detail while a Staff member can handle your ticket.\n\nReason: \`${reason}\``)
     .setFooter({ text: interaction.user.tag, iconURL: interaction.user.avatarURL({ dynamic: true }) });
+
+  ticket.permissionOverwrites.set(permissions);
 
   const row = new MessageActionRow()
     .addComponents(
@@ -72,6 +112,7 @@ module.exports = async (interaction, client, dbGuild) => {
 
   const successEmbed = new MessageEmbed()
     .setTitle('> Ticket created')
+    .setColor("BLURPLE")
     .setDescription(`The ticket ${ticket} was successfully created`)
     .setFooter({ text: interaction.user.tag, iconURL: interaction.user.avatarURL({ dynamic: true }) });
 

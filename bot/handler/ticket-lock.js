@@ -24,6 +24,7 @@ module.exports = async (interaction, client, dbGuild) => {
 
     const sucEmbed = new MessageEmbed()
       .setTitle('> Lock ticket')
+      .setColor("BLURPLE")
       .setDescription('This ticket has been locked.')
       .setFooter({ text: interaction.user.tag, iconURL: interaction.user.avatarURL({ dynamic: true }) });
 
@@ -40,6 +41,7 @@ module.exports = async (interaction, client, dbGuild) => {
 
     const sucEmbed = new MessageEmbed()
       .setTitle('> Unlock ticket')
+      .setColor("BLURPLE")
       .setDescription('This ticket has been unlocked.')
       .setFooter({ text: interaction.user.tag, iconURL: interaction.user.avatarURL({ dynamic: true }) });
 
@@ -47,7 +49,8 @@ module.exports = async (interaction, client, dbGuild) => {
   } else {
     const errorEmbed = new MessageEmbed()
       .setTitle('> Lock ticket')
-      .setDescription('This ticket ist not open nor closed. Is a deleting process running?')
+      .setColor("RED")
+      .setDescription('This ticket is not locked nor unlocked. Is a deleting process running?')
       .setFooter({ text: interaction.user.tag, iconURL: interaction.user.avatarURL({ dynamic: true }) });
 
     await interaction.reply({ embeds: [errorEmbed], ephemeral: true });
@@ -55,7 +58,8 @@ module.exports = async (interaction, client, dbGuild) => {
   } else {
     const errorEmbed = new MessageEmbed()
     .setTitle('> Lock ticket')
-    .setDescription('You are not allowed to do lock/unlock tickets.')
+    .setColor("RED")
+    .setDescription('You are not allowed to lock/unlock tickets.')
     .setFooter({ text: interaction.user.tag, iconURL: interaction.user.avatarURL({ dynamic: true }) });
 
     await interaction.reply({ embeds: [errorEmbed], ephemeral: true });

@@ -128,3 +128,11 @@ document.querySelectorAll('.inpset').forEach((elem) => {
         })
     } catch(e) {}
 })
+
+document.getElementById('messageInput').addEventListener('keydown', (e) => {
+    document.getElementById('messageInputChars').innerText = `${400 - e.target.value.length} characters left`
+
+    setTimeout(() => {
+        document.getElementById('messageInputChars').innerText = `${400 - document.getElementById('messageInput').value.length} characters left`
+    }, 1)
+})
