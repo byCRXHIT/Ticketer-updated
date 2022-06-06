@@ -54,7 +54,14 @@ module.exports = (interaction, client, dbGuild) => {
     try {
       interaction.channel.delete();
     } catch (e) {
-      return
+      const errorEmbed = new MessageEmbed()
+      .setTitle('Error')
+      .setColor("RED")
+      .setDescription('I don\'t have permission to delete this channel.')
+      .setFooter({ text: interaction.user.tag, iconURL: interaction.user.avatarURL({ dynamic: true }) })
+      .setTimestamp();
+
+    return interaction.channel.send({ embeds: [errorEmbed], ephemeral: true });
     }
   }, 10000);
 };

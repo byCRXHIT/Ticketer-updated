@@ -55,73 +55,105 @@ module.exports = async (interaction, client, dbGuild) => {
   } catch (e) {
     return
   }
-  const ticket = await interaction.guild.channels.create(dbGuild.settings.nameprefix.replace('{id}', dbGuild.ticketid), {
-    type: 'text',
-    permissionOverwrites: permissions,
-    parent: dbGuild.settings.category
-  });
+  
+  setTimeout(async () => {
+    try {
+    let ticket = await interaction.guild.channels.create(dbGuild.settings.nameprefix.replace('{id}', dbGuild.ticketid), {
+      type: 'text',
+      permissionOverwrites: permissions,
+      parent: dbGuild.settings.category
+    });
+    } catch (e) {
+      const errorEmbed = new MessageEmbed()
+      .setTitle('Error')
+      .setColor("RED")
+      .setDescription('I don\'t have permission to create a channel')
+      .setFooter({ text: interaction.user.tag, iconURL: interaction.user.avatarURL({ dynamic: true }) })
+      .setTimestamp();
 
-  try {
-    await ticket.setParent(dbGuild.settings.category);
-  } catch (e) {}
+      return interaction.editReply({ embeds: [errorEmbed], ephemeral: true });
+    }
 
-  const ticketEmbed = new MessageEmbed()
-    .setTitle(`> Ticket ${dbGuild.ticketid}`)
-    .setColor("BLURPLE")
-    .setDescription(`Welcome to this ticket. Please describe your issue in detail while a Staff member can handle your ticket.\n\nReason: \`${reason}\``)
-    .setFooter({ text: interaction.user.tag, iconURL: interaction.user.avatarURL({ dynamic: true }) });
+    try {
+      await ticket.setParent(dbGuild.settings.category);
+    } catch (e) {
+      const errorEmbed = new MessageEmbed()
+      .setTitle('Error')
+      .setColor("RED")
+      .setDescription('I don\'t have permission to set the parent of this channel.')
+      .setFooter({ text: interaction.user.tag, iconURL: interaction.user.avatarURL({ dynamic: true }) })
+      .setTimestamp();
 
-  ticket.permissionOverwrites.set(permissions);
+      return interaction.editReply({ embeds: [errorEmbed], ephemeral: true });
+    }
 
-  const row = new MessageActionRow()
-    .addComponents(
-      new MessageButton()
-        .setCustomId('ticket-claim')
-        .setLabel('Claim')
-        .setStyle('PRIMARY')
-        .setEmoji('977920180711723098'),
-      new MessageButton()
-        .setCustomId('ticket-transcript')
-        .setLabel('Transcript')
-        .setStyle('PRIMARY')
-        .setEmoji('978041593313501184'),
-      new MessageButton()
-        .setCustomId('ticket-members')
-        .setLabel('Add user')
-        .setStyle('PRIMARY')
-        .setEmoji('978747421892968538'),
-      new MessageButton()
-        .setCustomId('ticket-lock')
-        .setLabel('Lock/Unlock')
-        .setStyle('DANGER')
-        .setEmoji('979002078154358784'),
-      new MessageButton()
-        .setCustomId('ticket-close')
-        .setLabel('Close')
-        .setStyle('DANGER')
-        .setEmoji('977712715554488391'),
-    );
+    const ticketEmbed = new MessageEmbed()
+      .setTitle(`> Ticket ${dbGuild.ticketid}`)
+      .setColor("BLURPLE")
+      .setDescription(`Welcome to this ticket. Please describe your issue in detail while a Staff member can handle your ticket.\n\nReason: \`${reason}\``)
+      .setFooter({ text: interaction.user.tag, iconURL: interaction.user.avatarURL({ dynamic: true }) });
 
-  const message = await ticket.send({
-    embeds: [ticketEmbed], ephemeral: false, components: [row],
-  });
+      try {
+        ticket.permissionOverwrites.set(permissions);
+      } catch (e) {
+        const errorEmbed = new MessageEmbed()
+        .setTitle('Error')
+        .setColor("RED")
+        .setDescription('I don\'t have permission to change channel permissions.')
+        .setFooter({ text: interaction.user.tag, iconURL: interaction.user.avatarURL({ dynamic: true }) })
+        .setTimestamp();
 
-  dbGuild.tickets.push({
-    id: dbGuild.ticketid, reason, created: new Date(), channel: ticket.id, creator: interaction.user.id, members: [{ id: interaction.user.id, name: interaction.user.tag }], messages: [], claimed: 'none', state: 'open', message: message.id,
-  });
+        return interaction.editReply({ embeds: [errorEmbed], ephemeral: true });
+      }
 
-  const successEmbed = new MessageEmbed()
-    .setTitle('> Ticket created')
-    .setColor("BLURPLE")
-    .setDescription(`The ticket ${ticket} was successfully created`)
-    .setFooter({ text: interaction.user.tag, iconURL: interaction.user.avatarURL({ dynamic: true }) });
+    const row = new MessageActionRow()
+      .addComponents(
+        new MessageButton()
+          .setCustomId('ticket-claim')
+          .setLabel('Claim')
+          .setStyle('PRIMARY')
+          .setEmoji('977920180711723098'),
+        new MessageButton()
+          .setCustomId('ticket-transcript')
+          .setLabel('Transcript')
+          .setStyle('PRIMARY')
+          .setEmoji('978041593313501184'),
+        new MessageButton()
+          .setCustomId('ticket-members')
+          .setLabel('Add user')
+          .setStyle('PRIMARY')
+          .setEmoji('978747421892968538'),
+        new MessageButton()
+          .setCustomId('ticket-lock')
+          .setLabel('Lock/Unlock')
+          .setStyle('DANGER')
+          .setEmoji('979002078154358784'),
+        new MessageButton()
+          .setCustomId('ticket-close')
+          .setLabel('Close')
+          .setStyle('DANGER')
+          .setEmoji('977712715554488391'),
+      );
 
-  try {
-  interaction.editReply({ embeds: [successEmbed], ephemeral: true });
-  } catch (e) {
-    return
-  }
+    const message = await ticket.send({
+      embeds: [ticketEmbed], ephemeral: false, components: [row],
+    });
 
-  dbGuild.ticketid += 1;
-  dbGuild.save();
+    dbGuild.tickets.push({
+      id: dbGuild.ticketid, reason, created: new Date(), channel: ticket.id, creator: interaction.user.id, members: [{ id: interaction.user.id, name: interaction.user.tag }], messages: [], claimed: 'none', state: 'open', message: message.id,
+    });
+
+    const successEmbed = new MessageEmbed()
+      .setTitle('> Ticket created')
+      .setColor("BLURPLE")
+      .setDescription(`The ticket ${ticket} was successfully created! If you cant see it contact your server Admin.`)
+      .setFooter({ text: interaction.user.tag, iconURL: interaction.user.avatarURL({ dynamic: true }) });
+
+    try {
+    interaction.editReply({ embeds: [successEmbed], ephemeral: true });
+    } catch (e) {};
+
+    dbGuild.ticketid += 1;
+    dbGuild.save();
+  }, 500);
 };
