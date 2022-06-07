@@ -16,6 +16,8 @@ module.exports = (interaction, client, dbGuild) => {
     Guild.findOneAndUpdate({ id: interaction.guild.id }, { tickets: dbGuild.tickets }).catch();
   } catch (e) {}
 
+  let errored = false;
+
   const deleteEmbed = new MessageEmbed()
     .setTitle('> Delete Ticket')
     .setColor('BLURPLE')
@@ -42,7 +44,6 @@ module.exports = (interaction, client, dbGuild) => {
           .setStyle('LINK'),
       );
 
-    let errored = false;
     try {
       createTranscript(interaction.guild.id, dbTicket);
     } catch (e) {
@@ -63,7 +64,9 @@ module.exports = (interaction, client, dbGuild) => {
         components: [row],
       });
     }
+  }
 
+  if (!errored) {
     setTimeout(() => {
       try {
         interaction.channel.delete();
