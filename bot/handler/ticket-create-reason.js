@@ -42,13 +42,13 @@ module.exports = async (interaction, client, dbGuild) => {
     });
   }
 
-  if (dbGuild.settings.staff.role !== 'none') {
+  /* if (dbGuild.settings.staff.role !== 'none') {
     permissions.push({
       id: dbGuild.settings.staff.role,
       allow: ['VIEW_CHANNEL', 'READ_MESSAGE_HISTORY', 'SEND_MESSAGES', 'MANAGE_MESSAGES'],
       deny: [],
     });
-  }
+  } */
 
   try {
     interaction.reply({ embeds: [waitEmbed], ephemeral: true });
@@ -97,7 +97,7 @@ module.exports = async (interaction, client, dbGuild) => {
       return interaction.editReply({ embeds: [errorEmbed], ephemeral: true });
     }
 
-    try {
+    /* try {
       await ticket.setParent(dbGuild.settings.category);
     } catch (e) {
       const errorEmbed = new MessageEmbed()
@@ -108,7 +108,7 @@ module.exports = async (interaction, client, dbGuild) => {
         .setTimestamp();
 
       return interaction.editReply({ embeds: [errorEmbed], ephemeral: true });
-    }
+    } */
 
     try {
       ticket.permissionOverwrites.set(permissions);
@@ -160,6 +160,11 @@ module.exports = async (interaction, client, dbGuild) => {
 
     let msg;
     try {
+      if (dbGuild.options[Number(interaction.values[0])].permissions == 'none' && dbGuild.settings.staff.role !== 'none') {
+        ticket.send(`<@&${dbGuild.settings.staff.role}>`);
+      } else if (dbGuild.settings.staff.role !== 'none') {
+        ticket.send(`<@&${dbGuild.options[Number(interaction.values[0])].permissions}>`);
+      }
       msg = await ticket.send({
         embeds: [ticketEmbed], ephemeral: false, components: [row],
       });
