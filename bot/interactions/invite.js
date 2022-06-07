@@ -4,7 +4,7 @@ const { MessageEmbed, MessageActionRow, MessageButton } = require('discord.js');
 module.exports = {
   data: new SlashCommandBuilder()
     .setName('invite')
-    .setDescription('Displays the clients ping'),
+    .setDescription('Displays the invite url'),
 
   async execute(interaction) {
     const inviteembed = new MessageEmbed()

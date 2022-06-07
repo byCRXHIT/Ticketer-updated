@@ -8,7 +8,7 @@ const { version } = require('../../package.json');
 module.exports = {
   data: new SlashCommandBuilder()
     .setName('info')
-    .setDescription('Shows you informations about the bot.'),
+    .setDescription('Shows some information about the bot.'),
   async execute(interaction, client) {
     Guild.findOne({ id: interaction.guild.id })
       .then(async (result) => {

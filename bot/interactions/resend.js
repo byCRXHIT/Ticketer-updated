@@ -11,7 +11,7 @@ const Guild = require('../../db/models/guild');
 module.exports = {
   data: new SlashCommandBuilder()
     .setName('resend')
-    .setDescription('Provides you a list default commands'),
+    .setDescription('Provides you a list of default commands'),
   async execute(interaction, client) {
     if (interaction.member.permissions.has(Permissions.MANAGE_GUILD)) {
       Guild.findOne({ id: interaction.guild.id }).then(async (dbGuild) => {
