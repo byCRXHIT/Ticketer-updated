@@ -1,6 +1,6 @@
 /* Import modules */
 const {
-  MessageEmbed, MessageActionRow, MessageButton, MessageSelectMenu, TextInputComponent,
+  MessageEmbed, MessageActionRow, MessageButton, MessageSelectMenu, TextInputComponent, Permissions,
 } = require('discord.js');
 
 /* Export */
@@ -58,43 +58,65 @@ module.exports = async (interaction, client, dbGuild) => {
 
   setTimeout(async () => {
     let ticket;
+    if (!interaction.guild.me.permissions.has([Permissions.FLAGS.MANAGE_CHANNELS])) {
+      const errorEmbed = new MessageEmbed()
+        .setTitle('Error')
+        .setColor('RED')
+        .setDescription('I don\'t have permission to create a channel')
+        .setFooter({ text: interaction.user.tag, iconURL: interaction.user.avatarURL({ dynamic: true }) })
+        .setTimestamp();
+
+      return interaction.editReply({ embeds: [errorEmbed], ephemeral: true });
+    }
+
     try {
       ticket = await interaction.guild.channels.create(dbGuild.settings.nameprefix.replace('{id}', dbGuild.ticketid), {
         type: 'text',
         permissionOverwrites: permissions,
         parent: dbGuild.settings.category,
       });
-
-      try {
-        ticket.permissionOverwrites.set(permissions);
-      } catch (e) {
-        const errorEmbed = new MessageEmbed()
-          .setTitle('Error')
-          .setColor('RED')
-          .setDescription('I don\'t have permission to change channel permissions.')
-          .setFooter({ text: interaction.user.tag, iconURL: interaction.user.avatarURL({ dynamic: true }) })
-          .setTimestamp();
-
-        return interaction.editReply({ embeds: [errorEmbed], ephemeral: true });
-      }
-
-      try {
-        await ticket.setParent(dbGuild.settings.category);
-      } catch (e) {
-        const errorEmbed = new MessageEmbed()
-          .setTitle('Error')
-          .setColor('RED')
-          .setDescription('I don\'t have permission to set the parent of this channel.')
-          .setFooter({ text: interaction.user.tag, iconURL: interaction.user.avatarURL({ dynamic: true }) })
-          .setTimestamp();
-
-        return interaction.editReply({ embeds: [errorEmbed], ephemeral: true });
-      }
     } catch (e) {
       const errorEmbed = new MessageEmbed()
         .setTitle('Error')
         .setColor('RED')
         .setDescription('I don\'t have permission to create a channel')
+        .setFooter({ text: interaction.user.tag, iconURL: interaction.user.avatarURL({ dynamic: true }) })
+        .setTimestamp();
+
+      return interaction.editReply({ embeds: [errorEmbed], ephemeral: true });
+    }
+
+    if (!ticket) {
+      const errorEmbed = new MessageEmbed()
+        .setTitle('Error')
+        .setColor('RED')
+        .setDescription('An unknown error occurred while creating the ticket.')
+        .setFooter({ text: interaction.user.tag, iconURL: interaction.user.avatarURL({ dynamic: true }) })
+        .setTimestamp();
+
+      return interaction.editReply({ embeds: [errorEmbed], ephemeral: true });
+    }
+
+    try {
+      ticket.permissionOverwrites.set(permissions);
+    } catch (e) {
+      const errorEmbed = new MessageEmbed()
+        .setTitle('Error')
+        .setColor('RED')
+        .setDescription('I don\'t have permission to change channel permissions.')
+        .setFooter({ text: interaction.user.tag, iconURL: interaction.user.avatarURL({ dynamic: true }) })
+        .setTimestamp();
+
+      return interaction.editReply({ embeds: [errorEmbed], ephemeral: true });
+    }
+
+    try {
+      await ticket.setParent(dbGuild.settings.category);
+    } catch (e) {
+      const errorEmbed = new MessageEmbed()
+        .setTitle('Error')
+        .setColor('RED')
+        .setDescription('I don\'t have permission to set the parent of this channel.')
         .setFooter({ text: interaction.user.tag, iconURL: interaction.user.avatarURL({ dynamic: true }) })
         .setTimestamp();
 
