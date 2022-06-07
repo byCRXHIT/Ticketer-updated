@@ -98,12 +98,12 @@ module.exports = async (interaction, client, dbGuild) => {
     }
 
     try {
-      ticket.permissionOverwrites.set(permissions);
+      await ticket.setParent(dbGuild.settings.category);
     } catch (e) {
       const errorEmbed = new MessageEmbed()
         .setTitle('Error')
         .setColor('RED')
-        .setDescription('I don\'t have permission to change channel permissions.')
+        .setDescription('I don\'t have permission to set the parent of this channel.')
         .setFooter({ text: interaction.user.tag, iconURL: interaction.user.avatarURL({ dynamic: true }) })
         .setTimestamp();
 
@@ -111,12 +111,12 @@ module.exports = async (interaction, client, dbGuild) => {
     }
 
     try {
-      await ticket.setParent(dbGuild.settings.category);
+      ticket.permissionOverwrites.set(permissions);
     } catch (e) {
       const errorEmbed = new MessageEmbed()
         .setTitle('Error')
         .setColor('RED')
-        .setDescription('I don\'t have permission to set the parent of this channel.')
+        .setDescription('I don\'t have permission to change channel permissions.')
         .setFooter({ text: interaction.user.tag, iconURL: interaction.user.avatarURL({ dynamic: true }) })
         .setTimestamp();
 
@@ -141,11 +141,11 @@ module.exports = async (interaction, client, dbGuild) => {
           .setLabel('Transcript')
           .setStyle('PRIMARY')
           .setEmoji('978041593313501184'),
-        new MessageButton()
+        /* new MessageButton()
           .setCustomId('ticket-members')
           .setLabel('Add user')
           .setStyle('PRIMARY')
-          .setEmoji('978747421892968538'),
+          .setEmoji('978747421892968538'), */
         new MessageButton()
           .setCustomId('ticket-lock')
           .setLabel('Lock/Unlock')
@@ -158,12 +158,24 @@ module.exports = async (interaction, client, dbGuild) => {
           .setEmoji('977712715554488391'),
       );
 
-    const message = await ticket.send({
-      embeds: [ticketEmbed], ephemeral: false, components: [row],
-    });
+    let msg;
+    try {
+      msg = await ticket.send({
+        embeds: [ticketEmbed], ephemeral: false, components: [row],
+      });
+    } catch (e) {
+      const errorEmbed = new MessageEmbed()
+        .setTitle('Error')
+        .setColor('RED')
+        .setDescription('I don\'t have permission to send messages to this tickets.')
+        .setFooter({ text: interaction.user.tag, iconURL: interaction.user.avatarURL({ dynamic: true }) })
+        .setTimestamp();
+
+      return interaction.editReply({ embeds: [errorEmbed], ephemeral: true });
+    }
 
     dbGuild.tickets.push({
-      id: dbGuild.ticketid, reason, created: new Date(), channel: ticket.id, creator: interaction.user.id, members: [{ id: interaction.user.id, name: interaction.user.tag }], messages: [], claimed: 'none', state: 'open', message: message.id,
+      id: dbGuild.ticketid, reason, created: new Date(), channel: ticket.id, creator: interaction.user.id, members: [{ id: interaction.user.id, name: interaction.user.tag }], messages: [], claimed: 'none', state: 'open', message: msg.id,
     });
 
     const successEmbed = new MessageEmbed()

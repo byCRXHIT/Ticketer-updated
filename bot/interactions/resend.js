@@ -13,7 +13,7 @@ module.exports = {
     .setName('resend')
     .setDescription('Provides you a list of default commands'),
   async execute(interaction, client) {
-    if (interaction.member.permissions.has(Permissions.MANAGE_GUILD)) {
+    if (interaction.member.permissions.has(Permissions.FLAGS.MANAGE_GUILD)) {
       Guild.findOne({ id: interaction.guild.id }).then(async (dbGuild) => {
         const helpEmbed = new MessageEmbed()
           .setTitle('> Ticket')
