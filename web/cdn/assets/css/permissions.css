@@ -219,12 +219,13 @@ body .saveChanges {
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
-    background-color: rgba(37, 37, 37, .5);
+    background-color: rgba(37, 37, 37, 1);
     border-radius: 8px;
     position: fixed;
-    width: 79%;
-    margin-left: 355px;
+    width: fit-content;
+    right: 10px;
     bottom: 10px;
+    z-index: 99999;
 }
 
 body .saveChanges.active {

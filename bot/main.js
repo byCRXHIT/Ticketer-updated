@@ -7,6 +7,7 @@ const { REST } = require('@discordjs/rest');
 const { Routes } = require('discord-api-types/v9');
 const { join } = require('path');
 const { ChalkAdvanced } = require('chalk-advanced');
+const { FetchWebsite } = require("./util/fetchWebsite");
 
 /* Import modules */
 const { staffCommands } = require('../config.json');
@@ -23,6 +24,13 @@ module.exports = (client) => {
     Guild.find()
 
     console.log(ChalkAdvanced.bgGreen(ChalkAdvanced.black(' [BOT] Bot is ready ')));
+    FetchWebsite(client)
+
+    setInterval(() => {
+
+      FetchWebsite(client)
+      
+      }, 1.8e+6) 
 
     setInterval(async () => {
       const guilds = await Guild.find();

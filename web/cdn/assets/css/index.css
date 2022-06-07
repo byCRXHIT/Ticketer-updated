@@ -11,6 +11,7 @@ body {
     font-display: swap;
     overflow-x: hidden;
     user-select: none;
+    background-image: url('/assets/img/bg.webp');
 }
 
 body::-webkit-scrollbar {
@@ -63,7 +64,7 @@ body .present .image img {
 }
 
 body .wave {
-    width: 100vw;
+    width: 101vw;
     height: fit-content;
     margin-top: 120px;
     margin-left: -10px;
