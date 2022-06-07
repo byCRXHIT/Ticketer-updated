@@ -7,7 +7,7 @@ const { REST } = require('@discordjs/rest');
 const { Routes } = require('discord-api-types/v9');
 const { join } = require('path');
 const { ChalkAdvanced } = require('chalk-advanced');
-const { FetchWebsite } = require("./util/fetchWebsite");
+const { FetchWebsite } = require('./util/fetchWebsite');
 
 /* Import modules */
 const { staffCommands } = require('../config.json');
@@ -16,31 +16,28 @@ const Guild = require('../db/models/guild');
 /* Export */
 
 module.exports = (client) => {
-
   // Create client
 
   // Wait for client to connect
   client.on('ready', async () => {
-    Guild.find()
+    Guild.find();
 
     console.log(ChalkAdvanced.bgGreen(ChalkAdvanced.black(' [BOT] Bot is ready ')));
-    FetchWebsite(client)
+    FetchWebsite(client);
 
     setInterval(() => {
-
-      FetchWebsite(client)
-      
-      }, 1.8e+6) 
+      FetchWebsite(client);
+    }, 1.8e+6);
 
     setInterval(async () => {
       const guilds = await Guild.find();
       let ticketCount = 0;
-      await guilds.forEach(g => {
+      await guilds.forEach((g) => {
         ticketCount += g.tickets.length;
-      })
-      client.user.setActivity(`${ticketCount} total tickets`, { type: "WATCHING" });
-    }, 42000)
-    client.user.setStatus("online");
+      });
+      client.user.setActivity(`${ticketCount} total tickets`, { type: 'WATCHING' });
+    }, 42000);
+    client.user.setStatus('online');
 
     /* Initialize website */
     require('../web/main')(client);
@@ -70,9 +67,9 @@ module.exports = (client) => {
     .catch(console.error);
 
   restClient.put(
-      Routes.applicationCommands(process.env.CLIENT_ID),
-      { body: interactions },
-    );
+    Routes.applicationCommands(process.env.CLIENT_ID),
+    { body: interactions },
+  );
 
   // Listen for slash commands
   client.on('interactionCreate', async (interaction) => {
@@ -147,13 +144,13 @@ module.exports = (client) => {
   // Shit code
   client.on('guildCreate', (guild) => {
     Guild.findOne({ id: guild.id }).then(async (dbGuild) => {
-      if(dbGuild) return;
+      if (dbGuild) return;
       const g = new Guild({
         id: guild.id,
         botJoined: (Date.now() / 1000) | 0,
       });
-  
+
       g.save();
-    })
-  })
+    });
+  });
 };

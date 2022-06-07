@@ -1,25 +1,25 @@
-const { SlashCommandBuilder } = require("@discordjs/builders");
-const { MessageEmbed, MessageButton, MessageActionRow } = require("discord.js");
+const { SlashCommandBuilder } = require('@discordjs/builders');
+const { MessageEmbed, MessageButton, MessageActionRow } = require('discord.js');
 
 module.exports = {
   data: new SlashCommandBuilder()
-    .setName("dashboard")
-    .setDescription("Shows you the dashboard for this guild"),
+    .setName('dashboard')
+    .setDescription('Shows you the dashboard for this guild'),
   async execute(interaction) {
     const dashboardEmbed = new MessageEmbed()
-      .setColor("BLURPLE")
+      .setColor('BLURPLE')
       .setTimestamp()
       .setDescription(
-        `You can open the dashboard by clicking [here](https://ticketer.developersdungeon.xyz/dashboard/${interaction.guild.id}) or using the button below!`
+        `You can open the dashboard by clicking [here](https://ticketer.developersdungeon.xyz/dashboard/${interaction.guild.id}) or using the button below!`,
       )
-      .setFooter({ text: interaction.user.username, iconURL: interaction.user.avatarURL({ dynamic: true }) })
+      .setFooter({ text: interaction.user.username, iconURL: interaction.user.avatarURL({ dynamic: true }) });
     const row = new MessageActionRow().addComponents(
       new MessageButton()
-        .setLabel("Dashboard")
+        .setLabel('Dashboard')
         .setURL(
-          `https://ticketer.developersdungeon.xyz/dashboard/${interaction.guild.id}`
+          `https://ticketer.developersdungeon.xyz/dashboard/${interaction.guild.id}`,
         )
-        .setStyle("LINK")
+        .setStyle('LINK'),
     );
 
     await interaction.reply({
@@ -27,7 +27,7 @@ module.exports = {
       ephemeral: true,
       components: [row],
     });
-    setTimeout(function () {
+    setTimeout(() => {
       row.components[0].setDisabled(true);
       interaction.editReply({ embeds: [dashboardEmbed], components: [row] });
     }, 120000);

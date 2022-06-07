@@ -4,14 +4,14 @@ const {
   MessageActionRow,
   MessageButton,
   MessageSelectMenu,
-} = require("discord.js");
+} = require('discord.js');
 
 /* Export */
 module.exports = (interaction, client, dbGuild) => {
   const closeEmbed = new MessageEmbed()
-    .setTitle("> Close ticket")
-    .setColor("BLURPLE")
-    .setDescription("Are you sure you want to close this ticket?")
+    .setTitle('> Close ticket')
+    .setColor('BLURPLE')
+    .setDescription('Are you sure you want to close this ticket?')
     .setFooter({
       text: interaction.user.tag,
       iconURL: interaction.user.avatarURL({ dynamic: true }),
@@ -19,15 +19,15 @@ module.exports = (interaction, client, dbGuild) => {
 
   const rowConfirm = new MessageActionRow().addComponents(
     new MessageButton()
-      .setCustomId("ticket-close-confirm")
-      .setEmoji("977921614651981824")
-      .setLabel("Confirm")
-      .setStyle("SUCCESS"),
+      .setCustomId('ticket-close-confirm')
+      .setEmoji('977921614651981824')
+      .setLabel('Confirm')
+      .setStyle('SUCCESS'),
     new MessageButton()
-      .setCustomId("ticket-close-cancel")
-      .setEmoji("977712715554488391")
-      .setLabel("Cancel")
-      .setStyle("DANGER")
+      .setCustomId('ticket-close-cancel')
+      .setEmoji('977712715554488391')
+      .setLabel('Cancel')
+      .setStyle('DANGER'),
   );
 
   /*

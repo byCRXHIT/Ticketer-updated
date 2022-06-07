@@ -17,7 +17,7 @@ module.exports = async (interaction, client, dbGuild) => {
   if (!/^[0-9]*$/.test(value) || !user) {
     const errorEmbed = new MessageEmbed()
       .setTitle('> Add user')
-      .setColor("RED")
+      .setColor('RED')
       .setDescription('The user you specified was not found.')
       .setFooter({ text: interaction.user.tag, iconURL: interaction.user.avatarURL({ dynamic: true }) });
 
@@ -32,22 +32,22 @@ module.exports = async (interaction, client, dbGuild) => {
 
     const addEmbed = new MessageEmbed()
       .setTitle('> Add user')
-      .setColor("BLURPLE")
+      .setColor('BLURPLE')
       .setDescription(`The user <@!${value}> has been added to this ticket.`)
       .setFooter({ text: interaction.user.tag, iconURL: interaction.user.avatarURL({ dynamic: true }) });
 
-      interaction.deferReply();
-      interaction.deleteReply();
+    interaction.deferReply();
+    interaction.deleteReply();
     await interaction.channel.send({ embeds: [addEmbed], ephemeral: true });
   } else {
     const addEmbed = new MessageEmbed()
       .setTitle('> Add user')
-      .setColor("RED")
+      .setColor('RED')
       .setDescription(`The user <@!${value}> is already in this ticket.`)
       .setFooter({ text: interaction.user.tag, iconURL: interaction.user.avatarURL({ dynamic: true }) });
 
-      interaction.deferReply();
-      interaction.deleteReply();
+    interaction.deferReply();
+    interaction.deleteReply();
     await interaction.channel.send({ embeds: [addEmbed], ephemeral: true });
   }
 };

@@ -12,7 +12,7 @@ const guildSchema = new Schema({
       label: 'No reason provided',
       description: 'This reason has no further description.',
       value: '0',
-      permissions: 'none'
+      permissions: 'none',
     }],
   },
   botJoined: {
@@ -27,21 +27,21 @@ const guildSchema = new Schema({
     transcript: {
       type: { type: String, default: 'simple' },
       enabled: { type: Boolean, default: false },
-      channel: { type: String, default: 'none' }
+      channel: { type: String, default: 'none' },
     },
     messages: {
       create: { type: String, default: 'To create a ticket please use the button below.' },
     },
     permissions: {
       blacklist: { type: Array, default: [] },
-      
+
     },
     log: { type: String, default: 'none' },
     channel: { type: String, default: 'none' },
     category: { type: String, default: 'none' },
     nameprefix: { type: String, default: 'ticket-{id}' },
     maxtickets: { type: String, default: '3' },
-    message: { type: String, default: 'none' }
+    message: { type: String, default: 'none' },
   },
   log: { type: Array, default: [] },
   ticketid: { type: Number, default: 1 },

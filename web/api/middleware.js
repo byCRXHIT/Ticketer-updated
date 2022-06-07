@@ -57,7 +57,7 @@ const cdn = (app) => {
   require('./cdn')(app);
 
   return app;
-}
+};
 
 /* Export */
 module.exports = {

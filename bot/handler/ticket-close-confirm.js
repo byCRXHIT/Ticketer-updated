@@ -18,23 +18,23 @@ module.exports = (interaction, client, dbGuild) => {
 
   try {
     createTranscript(interaction.guild.id, dbTicket);
-  } catch(e) {}
+  } catch (e) {}
 
   const deleteEmbed = new MessageEmbed()
     .setTitle('> Delete Ticket')
-    .setColor("BLURPLE")
+    .setColor('BLURPLE')
     .setDescription('This ticket will be deleted in 10 seconds.')
     .setFooter({ text: interaction.user.tag, iconURL: interaction.user.avatarURL({ dynamic: true }) });
 
   interaction.channel.messages.cache.get(interaction.message.id).delete();
   interaction.channel.send({ embeds: [deleteEmbed], ephemeral: false });
-  if(dbGuild.settings.transcript.enabled) {
+  if (dbGuild.settings.transcript.enabled) {
     const transcriptEmbed = new MessageEmbed()
       .setTitle('> Ticket transcript')
-      .setColor("BLURPLE")
+      .setColor('BLURPLE')
       .setDescription('This is the transcript of this ticket.')
       .setFooter({ text: interaction.user.tag, iconURL: interaction.user.avatarURL({ dynamic: true }) });
-  
+
     const row = new MessageActionRow()
       .addComponents(
         new MessageButton()
@@ -43,25 +43,25 @@ module.exports = (interaction, client, dbGuild) => {
           .setStyle('LINK'),
       );
 
-      interaction.channel.send({
-        embeds: [transcriptEmbed],
-        ephemeral: false,
-        components: [row],
-      });
-    }
+    interaction.channel.send({
+      embeds: [transcriptEmbed],
+      ephemeral: false,
+      components: [row],
+    });
+  }
 
   setTimeout(() => {
     try {
       interaction.channel.delete();
     } catch (e) {
       const errorEmbed = new MessageEmbed()
-      .setTitle('Error')
-      .setColor("RED")
-      .setDescription('I don\'t have permission to delete this channel.')
-      .setFooter({ text: interaction.user.tag, iconURL: interaction.user.avatarURL({ dynamic: true }) })
-      .setTimestamp();
+        .setTitle('Error')
+        .setColor('RED')
+        .setDescription('I don\'t have permission to delete this channel.')
+        .setFooter({ text: interaction.user.tag, iconURL: interaction.user.avatarURL({ dynamic: true }) })
+        .setTimestamp();
 
-    return interaction.channel.send({ embeds: [errorEmbed], ephemeral: true });
+      return interaction.channel.send({ embeds: [errorEmbed], ephemeral: true });
     }
   }, 10000);
 };

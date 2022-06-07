@@ -27,24 +27,24 @@ module.exports = (app, client) => {
 
     await req.session.passport.user.guilds.forEach(async (guild) => {
       let joined = false;
-      if(client.guilds.cache.get(guild.id)) joined = true;
+      if (client.guilds.cache.get(guild.id)) joined = true;
 
       let permissions;
 
       try {
         permissions = new Permissions(guild.permissions_new);
-        if(!permissions.has(Permissions.FLAGS.MANAGED)) return;
+        if (!permissions.has(Permissions.FLAGS.MANAGED)) return;
       } catch (e) {
-        return
+        return;
       }
-      
+
       await guilds.push({
         id: guild.id,
         name: guild.name,
         icon: `https://cdn.discordapp.com/icons/${guild.id}/${guild.icon}.webp`,
         joined,
       });
-    })
+    });
 
     await res.render(join(__dirname, '../views/dashboard.ejs'), {
       user: req.session.passport.user,
@@ -59,11 +59,11 @@ module.exports = (app, client) => {
     let guild;
     try {
       guild = await client.guilds.fetch(req.params.id);
-    } catch(e) {
-      return res.redirect('/dashboard')
+    } catch (e) {
+      return res.redirect('/dashboard');
     }
 
-    if(!guild) return res.redirect('/dashboard')
+    if (!guild) return res.redirect('/dashboard');
 
     Guild.findOne({ id: req.params.id }).then(async (dbGuild) => {
       if (!dbGuild || !guild) return res.redirect('/dashboard');
@@ -71,10 +71,10 @@ module.exports = (app, client) => {
       await res.render(join(__dirname, '../views/server.ejs'), {
         user: req.session.passport.user,
         guild,
-        db: dbGuild
+        db: dbGuild,
       });
-    })
-  })
+    });
+  });
 
   app.get('/dashboard/:id/tickets', async (req, res) => {
     if (!req.session.passport) return res.redirect('/api/login');
@@ -89,23 +89,23 @@ module.exports = (app, client) => {
       await dbGuild.tickets.forEach(async (ticket) => {
         ticket.authorUser = await client.users.fetch(ticket.creator);
         ticket.authorUser = ticket.authorUser.tag;
-        if(ticket.claimed !== 'none') ticket.staffUser = await client.users.fetch(ticket.claimed);
-        if(ticket.claimed == 'none') ticket.staffUser = 'none';
-        if(ticket.staffUser !== 'none') ticket.staffUser = ticket.staffUser.tag;
-        
-        await tickets.push(ticket)
-      })
+        if (ticket.claimed !== 'none') ticket.staffUser = await client.users.fetch(ticket.claimed);
+        if (ticket.claimed == 'none') ticket.staffUser = 'none';
+        if (ticket.staffUser !== 'none') ticket.staffUser = ticket.staffUser.tag;
+
+        await tickets.push(ticket);
+      });
 
       setTimeout(() => {
         res.render(join(__dirname, '../views/tickets.ejs'), {
           user: req.session.passport.user,
           guild,
           db: dbGuild,
-          tickets
+          tickets,
         });
-      }, 400)
-    })
-  })
+      }, 400);
+    });
+  });
 
   app.get('/dashboard/:id/staff', async (req, res) => {
     if (!req.session.passport) return res.redirect('/api/login');
@@ -115,34 +115,34 @@ module.exports = (app, client) => {
     Guild.findOne({ id: req.params.id }).then(async (dbGuild) => {
       if (!dbGuild || !guild) return res.redirect('/dashboard');
 
-      let staffrole = 'none'
+      let staffrole = 'none';
       try {
         staffrole = await guild.roles.cache.get(dbGuild.settings.staff.role).name;
-      } catch(e) {}
+      } catch (e) {}
 
       let staff = [];
       dbGuild.tickets.forEach(async (ticket) => {
-        if(ticket.claimed !== 'none' && staff.findIndex((s) => s.id == ticket.claimed) == -1) {
+        if (ticket.claimed !== 'none' && staff.findIndex((s) => s.id == ticket.claimed) == -1) {
           try {
             let staffUser = await client.users.fetch(ticket.claimed);
             let tickets;
-            if(dbGuild.tickets.filter((t) => t.claimed == staffUser.id).length > 0) tickets = dbGuild.tickets.filter((t) => t.claimed == staffUser.id).length;
+            if (dbGuild.tickets.filter((t) => t.claimed == staffUser.id).length > 0) tickets = dbGuild.tickets.filter((t) => t.claimed == staffUser.id).length;
             staff.push({ user: staffUser, tickets });
-          } catch(e) {}
+          } catch (e) {}
         }
-      })
+      });
 
-      setTimeout(async() => {
+      setTimeout(async () => {
         await res.render(join(__dirname, '../views/staff.ejs'), {
           user: req.session.passport.user,
           guild,
           db: dbGuild,
           staffrole,
-          staff
+          staff,
         });
-      }, 400)
-    })
-  })
+      }, 400);
+    });
+  });
 
   app.get('/dashboard/:id/settings', async (req, res) => {
     if (!req.session.passport) return res.redirect('/api/login');
@@ -155,25 +155,25 @@ module.exports = (app, client) => {
       let categorys = [];
       let channels = [];
 
-      await guild.channels.cache.filter(ch => ch.type === 'GUILD_CATEGORY').forEach(async (category) => {
-        await categorys.push({ name: category.name, id: category.id })
-      })
+      await guild.channels.cache.filter((ch) => ch.type === 'GUILD_CATEGORY').forEach(async (category) => {
+        await categorys.push({ name: category.name, id: category.id });
+      });
 
-      await guild.channels.cache.filter(ch => ch.type === 'GUILD_TEXT').forEach(async (channel) => {
-        await channels.push({ name: channel.name, id: channel.id })
-      })
+      await guild.channels.cache.filter((ch) => ch.type === 'GUILD_TEXT').forEach(async (channel) => {
+        await channels.push({ name: channel.name, id: channel.id });
+      });
 
-      setTimeout(async() => {
+      setTimeout(async () => {
         await res.render(join(__dirname, '../views/settings.ejs'), {
           user: req.session.passport.user,
           guild,
           db: dbGuild,
           categorys,
-          channels
+          channels,
         });
-      }, 200)
-    })
-  })
+      }, 200);
+    });
+  });
 
   app.get('/dashboard/:id/settings/reasons', async (req, res) => {
     if (!req.session.passport) return res.redirect('/api/login');
@@ -187,18 +187,18 @@ module.exports = (app, client) => {
 
       await dbGuild.options.forEach(async (option) => {
         await reasons.push({ label: option.label, description: option.description });
-      })
+      });
 
-      setTimeout(async() => {
+      setTimeout(async () => {
         await res.render(join(__dirname, '../views/reasons.ejs'), {
           user: req.session.passport.user,
           guild,
           db: dbGuild,
-          reasons
+          reasons,
         });
-      }, 200)
-    })
-  })
+      }, 200);
+    });
+  });
 
   app.get('/dashboard/:id/settings/permissions', async (req, res) => {
     if (!req.session.passport) return res.redirect('/api/login');
@@ -210,23 +210,23 @@ module.exports = (app, client) => {
 
       let roles = [];
       await guild.roles.cache
-      .sort((a, b) => b.position - a.position)
-      .map(r => r)
-      .forEach(async (role) => {
-        if(role.name == '@everyone' || role.name == '@here' || !role.name) return;
-        roles.push({ id: role.id, name: role.name })
-      })
+        .sort((a, b) => b.position - a.position)
+        .map((r) => r)
+        .forEach(async (role) => {
+          if (role.name == '@everyone' || role.name == '@here' || !role.name) return;
+          roles.push({ id: role.id, name: role.name });
+        });
 
-      setTimeout(async() => {
+      setTimeout(async () => {
         await res.render(join(__dirname, '../views/permissions.ejs'), {
           user: req.session.passport.user,
           guild,
           db: dbGuild,
-          roles
+          roles,
         });
-      }, 200)
-    })
-  })
+      }, 200);
+    });
+  });
 
   app.get('/dashboard/:id/settings/transcripts', async (req, res) => {
     if (!req.session.passport) return res.redirect('/api/login');
@@ -238,29 +238,29 @@ module.exports = (app, client) => {
 
       let channels = [];
 
-      await guild.channels.cache.filter(ch => ch.type === 'GUILD_TEXT').forEach(async (channel) => {
-        await channels.push({ name: channel.name, id: channel.id })
-      })
+      await guild.channels.cache.filter((ch) => ch.type === 'GUILD_TEXT').forEach(async (channel) => {
+        await channels.push({ name: channel.name, id: channel.id });
+      });
 
-      setTimeout(async() => {
+      setTimeout(async () => {
         await res.render(join(__dirname, '../views/transcripts.ejs'), {
           user: req.session.passport.user,
           guild,
           db: dbGuild,
-          channels
+          channels,
         });
-      }, 200)
-    })
-  })
-  
+      }, 200);
+    });
+  });
+
   app.get('/ticket/:guild/:channel', (req, res) => {
     const { password } = req.query;
     const { guild, channel } = req.params;
-  
+
     if (password == String(guild).substring(0, guild.length / 2) + String(channel).substring(channel.length / 2, channel.length)) {
       res.sendFile(join(__dirname, `../cdn/tickets/${guild}/${channel}.html`));
     } else res.send('Wrong password');
   });
 
-  return app
-}
+  return app;
+};

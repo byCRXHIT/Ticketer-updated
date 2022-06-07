@@ -2,24 +2,28 @@ const { writeFileSync, existsSync, mkdirSync } = require('fs');
 const { join } = require('path');
 const passport = require('passport');
 const DiscordStrategy = require('passport-discord').Strategy;
-const { Permissions, MessageEmbed, MessageActionRow, MessageButton } = require('discord.js');
+const {
+  Permissions, MessageEmbed, MessageActionRow, MessageButton,
+} = require('discord.js');
 
 const Guild = require('../../db/models/guild');
 
 module.exports = (app, client) => {
-  passport.use(new DiscordStrategy({
-    clientID: client.user.id,
-    clientSecret: process.env.CLIENT_SECRET,
-    callbackURL: 'https://ticketer.developersdungeon.xyz/api/callback',
-    scope: ['identify', 'guilds']
-  },
-  async function(accessToken, refreshToken, profile, cb) {
-    await process.nextTick(async () => {
-      if (profile.guilds == undefined) return cb(null, false);
-      
-      return cb(null, profile);
-    });
-  }));
+  passport.use(new DiscordStrategy(
+    {
+      clientID: client.user.id,
+      clientSecret: process.env.CLIENT_SECRET,
+      callbackURL: 'https://ticketer.developersdungeon.xyz/api/callback',
+      scope: ['identify', 'guilds'],
+    },
+    (async (accessToken, refreshToken, profile, cb) => {
+      await process.nextTick(async () => {
+        if (profile.guilds == undefined) return cb(null, false);
+
+        return cb(null, profile);
+      });
+    }),
+  ));
 
   passport.serializeUser((user, done) => {
     if (!user) return;
@@ -33,7 +37,7 @@ module.exports = (app, client) => {
   app.get('/api', (req, res) => {
     res.send('Api online');
   });
-  
+
   app.get('/api/login', passport.authenticate('discord'));
 
   app.get('/api/callback', passport.authenticate('discord', {
@@ -45,26 +49,26 @@ module.exports = (app, client) => {
 
   app.get('/api/logout', (req, res) => {
     req.session.destroy();
-    res.redirect('/')
-  })
-  
+    res.redirect('/');
+  });
+
   app.post('/api/ticket/create', (req, res) => {
     const { guild, ticket } = req.body;
-  
+
     let members = '';
     let memberCount = 0;
     ticket.members.forEach((member) => {
-      if(members.includes(member.name)) return;
+      if (members.includes(member.name)) return;
       memberCount += 1;
       members += `<div class="user"><div class="img"></div><a class="name">${member.name}</a></div>`;
     });
-  
+
     let messages = '';
     ticket.messages.forEach((message) => {
       const date = new Date(message.timestamp);
       messages += `<div class="message"><div class="user"><div class="img"></div><a>${message.name} (${date.getMonth()}.${date.getDate()}.${date.getFullYear()}, ${date.getMilliseconds()}:${date.getMinutes()}:${date.getHours()})</a></div><a class="value">${message.message}</a></div>`;
     });
-  
+
     const file = `
       <!DOCTYPE html>
       <html lang="en">
@@ -83,7 +87,7 @@ module.exports = (app, client) => {
               <div class="content">
                   <div class="messages">
                       ${messages}
-                      ${ticket.state == 'closed' ? `<div class="message"><div class="user"><img class="img" src="<div></div><a>System</a></div><a class="value">This ticket has been closed.</a></div>'` : ''}
+                      ${ticket.state == 'closed' ? '<div class="message"><div class="user"><img class="img" src="<div></div><a>System</a></div><a class="value">This ticket has been closed.</a></div>\'' : ''}
                   </div>
                   <div class="users">
                       <div class="list">
@@ -99,66 +103,66 @@ module.exports = (app, client) => {
           </body>
       </html>
     `;
-  
+
     if (!existsSync(join(__dirname, `../cdn/tickets/${guild}/`))) {
       mkdirSync(join(__dirname, `../cdn/tickets/${guild}/`), { recursive: true });
     }
-  
+
     writeFileSync(
       join(__dirname, `../cdn/tickets/${guild}/${ticket.channel}.html`),
       file,
       { overwrite: true },
     );
-  
+
     res.json({ saved: true });
   });
 
   app.post('/api/setting/name', async (req, res) => {
     const { value, guildId, userId } = req.body;
-    if(!req.session.passport || userId !== req.session.passport.user.id) return res.redirect('/dashboard')
-    if(!value || !guildId || !userId) return res.json({ saved: false })
+    if (!req.session.passport || userId !== req.session.passport.user.id) return res.redirect('/dashboard');
+    if (!value || !guildId || !userId) return res.json({ saved: false });
 
     Guild.findOne({ id: guildId }).then(async (dbGuild) => {
       const guild = await client.guilds.fetch(guildId);
       const user = await guild.members.fetch(userId);
-      if(!dbGuild || !guild) return res.json({ saved: false });
-      if(!user.permissions.has(Permissions.FLAGS.MANAGE_GUILD)) return res.redirect('/dashboard');
+      if (!dbGuild || !guild) return res.json({ saved: false });
+      if (!user.permissions.has(Permissions.FLAGS.MANAGE_GUILD)) return res.redirect('/dashboard');
 
       dbGuild.settings.nameprefix = value;
       dbGuild.save();
 
-      res.json({ saved: true })
+      res.json({ saved: true });
     });
-  })
+  });
 
   app.post('/api/setting/channel', async (req, res) => {
     const { value, guildId, userId } = req.body;
-    if(!req.session.passport || userId !== req.session.passport.user.id) return res.redirect('/dashboard')
-    if(!value || !guildId || !userId) return res.json({ saved: false })
+    if (!req.session.passport || userId !== req.session.passport.user.id) return res.redirect('/dashboard');
+    if (!value || !guildId || !userId) return res.json({ saved: false });
 
     Guild.findOne({ id: guildId }).then(async (dbGuild) => {
       const guild = await client.guilds.fetch(guildId);
       const user = await guild.members.fetch(userId);
-      if(!dbGuild || !guild) return res.json({ saved: false });
-      if(!user.permissions.has(Permissions.FLAGS.MANAGE_GUILD)) return res.redirect('/dashboard');
+      if (!dbGuild || !guild) return res.json({ saved: false });
+      if (!user.permissions.has(Permissions.FLAGS.MANAGE_GUILD)) return res.redirect('/dashboard');
 
       try {
         const channel = await guild.channels.fetch(dbGuild.settings.channel);
-        if(channel) {
+        if (channel) {
           const msg = await channel.messages.fetch(dbGuild.settings.message);
           msg.delete();
         }
-      } catch(e) {}
+      } catch (e) {}
 
       dbGuild.settings.channel = value;
       dbGuild.save();
 
-      res.json({ saved: true })
+      res.json({ saved: true });
 
       const createEmbed = new MessageEmbed()
-      .setTitle('> Ticket')
-      .setDescription(dbGuild.settings.messages.create.replaceAll('\\n', '\n'))
-      .setFooter({ text: client.user.tag, iconURL: client.user.avatarURL({ dynamic: true }) });
+        .setTitle('> Ticket')
+        .setDescription(dbGuild.settings.messages.create.replaceAll('\\n', '\n'))
+        .setFooter({ text: client.user.tag, iconURL: client.user.avatarURL({ dynamic: true }) });
 
       const row = new MessageActionRow()
         .addComponents(
@@ -167,77 +171,76 @@ module.exports = (app, client) => {
             .setDisabled(false)
             .setEmoji('🎫')
             .setStyle('SUCCESS'),
-      );
+        );
 
       try {
         const message = await client.channels.cache.get(value).send({ embeds: [createEmbed], components: [row] });
         dbGuild.settings.message = message.id;
         dbGuild.save();
-      } catch(e) {
-        return
+      } catch (e) {
+        return;
       }
     });
-  })
+  });
 
   app.post('/api/setting/category', async (req, res) => {
     const { value, guildId, userId } = req.body;
-    if(!req.session.passport || userId !== req.session.passport.user.id) return res.redirect('/dashboard')
-    if(!value || !guildId || !userId) return res.json({ saved: false })
+    if (!req.session.passport || userId !== req.session.passport.user.id) return res.redirect('/dashboard');
+    if (!value || !guildId || !userId) return res.json({ saved: false });
 
     Guild.findOne({ id: guildId }).then(async (dbGuild) => {
       const guild = await client.guilds.fetch(guildId);
       const user = await guild.members.fetch(userId);
-      if(!dbGuild || !guild) return res.json({ saved: false });
-      if(!user.permissions.has(Permissions.FLAGS.MANAGE_GUILD)) return res.redirect('/dashboard');
+      if (!dbGuild || !guild) return res.json({ saved: false });
+      if (!user.permissions.has(Permissions.FLAGS.MANAGE_GUILD)) return res.redirect('/dashboard');
 
       dbGuild.settings.category = value;
       dbGuild.save();
 
-      res.json({ saved: true })
+      res.json({ saved: true });
     });
-  })
+  });
 
   app.post('/api/setting/maxtickets', async (req, res) => {
     const { value, guildId, userId } = req.body;
-    if(!req.session.passport || userId !== req.session.passport.user.id) return res.redirect('/dashboard')
-    if(!value || !guildId || !userId || Number(value) < 1 || Number(value) > 10) return res.json({ saved: false })
+    if (!req.session.passport || userId !== req.session.passport.user.id) return res.redirect('/dashboard');
+    if (!value || !guildId || !userId || Number(value) < 1 || Number(value) > 10) return res.json({ saved: false });
 
     Guild.findOne({ id: guildId }).then(async (dbGuild) => {
       const guild = await client.guilds.fetch(guildId);
       const user = await guild.members.fetch(userId);
-      if(!dbGuild || !guild) return res.json({ saved: false });
-      if(!user.permissions.has(Permissions.FLAGS.MANAGE_GUILD)) return res.redirect('/dashboard');
+      if (!dbGuild || !guild) return res.json({ saved: false });
+      if (!user.permissions.has(Permissions.FLAGS.MANAGE_GUILD)) return res.redirect('/dashboard');
 
       dbGuild.settings.maxtickets = String(value);
       dbGuild.save();
 
-      res.json({ saved: true })
+      res.json({ saved: true });
     });
-  })
+  });
 
   app.post('/api/setting/message', async (req, res) => {
     const { value, guildId, userId } = req.body;
-    if(!req.session.passport || userId !== req.session.passport.user.id) return res.redirect('/dashboard')
-    if(!value || !guildId || !userId || Number(value) < 1 || Number(value) > 10) return res.json({ saved: false })
+    if (!req.session.passport || userId !== req.session.passport.user.id) return res.redirect('/dashboard');
+    if (!value || !guildId || !userId || Number(value) < 1 || Number(value) > 10) return res.json({ saved: false });
 
     Guild.findOne({ id: guildId }).then(async (dbGuild) => {
       const guild = await client.guilds.fetch(guildId);
       const user = await guild.members.fetch(userId);
-      if(!dbGuild || !guild) return res.json({ saved: false });
-      if(!user.permissions.has(Permissions.FLAGS.MANAGE_GUILD)) return res.redirect('/dashboard');
+      if (!dbGuild || !guild) return res.json({ saved: false });
+      if (!user.permissions.has(Permissions.FLAGS.MANAGE_GUILD)) return res.redirect('/dashboard');
 
       dbGuild.settings.messages.create = String(value);
       dbGuild.save();
 
       try {
         const channel = await guild.channels.fetch(dbGuild.settings.channel);
-        if(channel) {
-          
+        if (channel) {
           const createEmbed = new MessageEmbed()
-          .setTitle('> Ticket')
-          .setDescription(dbGuild.settings.messages.create.replaceAll('\\n', '\n'))
-          .setFooter({ text: client.user.tag, iconURL: client.user.avatarURL({ dynamic: true }) });
-    
+            .setTitle('> Ticket')
+            .setDescription(dbGuild.settings.messages.create.replaceAll('\\n', '\n'))
+            .setFooter({ text: client.user.tag, iconURL: client.user.avatarURL({ dynamic: true }) });
+
           const row = new MessageActionRow()
             .addComponents(
               new MessageButton()
@@ -245,126 +248,126 @@ module.exports = (app, client) => {
                 .setDisabled(false)
                 .setEmoji('🎫')
                 .setStyle('SUCCESS'),
-          );
+            );
 
           const msg = await channel.messages.fetch(dbGuild.settings.message);
           msg.edit({ embeds: [createEmbed], components: [row] });
         }
-      } catch(e) {}
+      } catch (e) {}
 
-      res.json({ saved: true })
+      res.json({ saved: true });
     });
-  })
+  });
 
   app.post('/api/setting/reasons', async (req, res) => {
     const { value, guildId, userId } = req.body;
-    if(!req.session.passport || userId !== req.session.passport.user.id) return res.redirect('/dashboard')
-    if(!value || !guildId || !userId || Number(value.length) < 1 || Number(value.length) > 10) return res.json({ saved: false })
+    if (!req.session.passport || userId !== req.session.passport.user.id) return res.redirect('/dashboard');
+    if (!value || !guildId || !userId || Number(value.length) < 1 || Number(value.length) > 10) return res.json({ saved: false });
 
     Guild.findOne({ id: guildId }).then(async (dbGuild) => {
       const guild = await client.guilds.fetch(guildId);
       const user = await guild.members.fetch(userId);
-      if(!dbGuild || !guild) return res.json({ saved: false });
-      if(!user.permissions.has(Permissions.FLAGS.MANAGE_GUILD)) return res.redirect('/dashboard');
+      if (!dbGuild || !guild) return res.json({ saved: false });
+      if (!user.permissions.has(Permissions.FLAGS.MANAGE_GUILD)) return res.redirect('/dashboard');
 
       dbGuild.options = value;
       dbGuild.save();
 
-      res.json({ saved: true })
+      res.json({ saved: true });
     });
-  })
+  });
 
   app.post('/api/setting/log', async (req, res) => {
     const { value, guildId, userId } = req.body;
-    if(!req.session.passport || userId !== req.session.passport.user.id) return res.redirect('/dashboard')
-    if(!value || !guildId || !userId) return res.json({ saved: false })
+    if (!req.session.passport || userId !== req.session.passport.user.id) return res.redirect('/dashboard');
+    if (!value || !guildId || !userId) return res.json({ saved: false });
 
     Guild.findOne({ id: guildId }).then(async (dbGuild) => {
       const guild = await client.guilds.fetch(guildId);
       const user = await guild.members.fetch(userId);
-      if(!dbGuild || !guild) return res.json({ saved: false });
-      if(!user.permissions.has(Permissions.FLAGS.MANAGE_GUILD)) return res.redirect('/dashboard');
+      if (!dbGuild || !guild) return res.json({ saved: false });
+      if (!user.permissions.has(Permissions.FLAGS.MANAGE_GUILD)) return res.redirect('/dashboard');
 
       try {
         const channel = await guild.channels.fetch(value);
-        if(channel) {
+        if (channel) {
           const logEmbed = new MessageEmbed()
-          .setTitle('> Log')
-          .setDescription('This channel has been set as the log channel.')
-          .setFooter({ text: client.user.tag, iconURL: client.user.avatarURL({ dynamic: true }) });
+            .setTitle('> Log')
+            .setDescription('This channel has been set as the log channel.')
+            .setFooter({ text: client.user.tag, iconURL: client.user.avatarURL({ dynamic: true }) });
 
-          channel.send({ embeds: [logEmbed] })
+          channel.send({ embeds: [logEmbed] });
         }
-      } catch(e) {}
+      } catch (e) {}
 
       dbGuild.settings.transcript.channel = value;
       dbGuild.save();
 
-      res.json({ saved: true })
+      res.json({ saved: true });
     });
-  })
+  });
 
   app.post('/api/setting/transcript/state', async (req, res) => {
     const { value, guildId, userId } = req.body;
-    if(!req.session.passport || userId !== req.session.passport.user.id) return res.redirect('/dashboard')
-    if(value == undefined || !guildId || !userId) return res.json({ saved: false })
+    if (!req.session.passport || userId !== req.session.passport.user.id) return res.redirect('/dashboard');
+    if (value == undefined || !guildId || !userId) return res.json({ saved: false });
 
     Guild.findOne({ id: guildId }).then(async (dbGuild) => {
       const guild = await client.guilds.fetch(guildId);
       const user = await guild.members.fetch(userId);
-      if(!dbGuild || !guild) return res.json({ saved: false });
-      if(!user.permissions.has(Permissions.FLAGS.MANAGE_GUILD)) return res.redirect('/dashboard');
+      if (!dbGuild || !guild) return res.json({ saved: false });
+      if (!user.permissions.has(Permissions.FLAGS.MANAGE_GUILD)) return res.redirect('/dashboard');
 
       dbGuild.settings.transcript.enabled = value;
       dbGuild.save();
 
-      res.json({ saved: true })
+      res.json({ saved: true });
     });
-  })
+  });
 
   app.post('/api/setting/permissions/staff', async (req, res) => {
     const { value, guildId, userId } = req.body;
-    if(!req.session.passport || userId !== req.session.passport.user.id) return res.redirect('/dashboard')
-    if(!value || !guildId || !userId) return res.json({ saved: false })
+    if (!req.session.passport || userId !== req.session.passport.user.id) return res.redirect('/dashboard');
+    if (!value || !guildId || !userId) return res.json({ saved: false });
 
     Guild.findOne({ id: guildId }).then(async (dbGuild) => {
       const guild = await client.guilds.fetch(guildId);
       const user = await guild.members.fetch(userId);
-      if(!dbGuild || !guild) return res.json({ saved: false });
-      if(!user.permissions.has(Permissions.FLAGS.MANAGE_GUILD)) return res.redirect('/dashboard');
+      if (!dbGuild || !guild) return res.json({ saved: false });
+      if (!user.permissions.has(Permissions.FLAGS.MANAGE_GUILD)) return res.redirect('/dashboard');
 
       dbGuild.settings.staff.role = value;
       dbGuild.save();
 
-      res.json({ saved: true })
+      res.json({ saved: true });
     });
-  })
+  });
 
   app.post('/api/setting/permissions/reasons', async (req, res) => {
     const { value, guildId, userId } = req.body;
-    if(!req.session.passport || userId !== req.session.passport.user.id) return res.redirect('/dashboard')
-    if(!value || !guildId || !userId) return res.json({ saved: false })
+    if (!req.session.passport || userId !== req.session.passport.user.id) return res.redirect('/dashboard');
+    if (!value || !guildId || !userId) return res.json({ saved: false });
 
     Guild.findOne({ id: guildId }).then(async (dbGuild) => {
       const guild = await client.guilds.fetch(guildId);
       const user = await guild.members.fetch(userId);
-      if(!dbGuild || !guild) return res.json({ saved: false });
-      if(!user.permissions.has(Permissions.FLAGS.MANAGE_GUILD)) return res.redirect('/dashboard');
+      if (!dbGuild || !guild) return res.json({ saved: false });
+      if (!user.permissions.has(Permissions.FLAGS.MANAGE_GUILD)) return res.redirect('/dashboard');
 
-      let options = []
+      let options = [];
 
       dbGuild.options.forEach((option) => {
-        const v = value[value.findIndex(v => v.value == option.value)]
+        const v = value[value.findIndex((v) => v.value == option.value)];
 
-        option.permissions = v.permissions
+        option.permissions = v.permissions;
 
-        options.push(option)
-      })
+        options.push(option);
+      });
 
-      Guild.findOneAndUpdate({ id: guildId }, { options: options }).catch();
-      res.json({ saved: true })
+      Guild.findOneAndUpdate({ id: guildId }, { options }).catch();
+      res.json({ saved: true });
     });
-  })
+  });
 
   return app;
-}
+};
