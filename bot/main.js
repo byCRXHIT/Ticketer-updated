@@ -92,7 +92,7 @@ module.exports = (client) => {
         try {
           await command.execute(interaction, client);
         } catch (e) {
-          console.error(e);
+          console.log(e);
         }
       }
     });
@@ -107,7 +107,7 @@ module.exports = (client) => {
         try {
           require(`./handler/${interaction.customId}`)(interaction, client, dbGuild);
         } catch (e) {
-          console.error(e);
+          console.log(e);
         }
       } else return;
     });
@@ -120,7 +120,7 @@ module.exports = (client) => {
         require(`./handler/${interaction.customId}`)(interaction, client, dbGuild);
       });
     } catch (e) {
-      console.error(e);
+      console.log(e);
     }
   });
 
