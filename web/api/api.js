@@ -13,7 +13,7 @@ module.exports = (app, client) => {
     {
       clientID: client.user.id,
       clientSecret: process.env.CLIENT_SECRET,
-      callbackURL: 'https://ticketer.developersdungeon.xyz/api/callback',
+      callbackURL: process.env.CALLBACK_URL,
       scope: ['identify', 'guilds'],
     },
     (async (accessToken, refreshToken, profile, cb) => {
