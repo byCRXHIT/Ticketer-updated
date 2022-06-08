@@ -1,14 +1,34 @@
 const { join } = require('path');
 const { Permissions } = require('discord.js');
+const fs = require('fs');
 
 const Guild = require('../../db/models/guild');
 
 module.exports = (app, client) => {
-  app.get('/', (req, res) => {
+  app.get('/', async (req, res) => {
     let user = false;
     if (req.session.passport) user = req.session.passport.user;
+    let commands = fs.readdirSync(join(__dirname, '../../bot/interactions')).filter((f) => f.endsWith('.js')).length;
+    let guilds = client.guilds.cache.size || 0;
+    let users = client.guilds.cache
+      .reduce((a, b) => a + b.memberCount, 0)
+      .toLocaleString() || 0;
+    let tickets = 0;
+    await Guild.find()
+      .then((dbGuilds) => {
+        dbGuilds.forEach((dbGuild) => {
+          if (dbGuild) tickets += dbGuild.tickets.length;
+        });
+      });
+
     res.render(join(__dirname, '../views/index.ejs'), {
       user,
+      stats: {
+        commands,
+        guilds,
+        users,
+        tickets,
+      },
     });
   });
 

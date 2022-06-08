@@ -17,8 +17,16 @@
         overflow-x: hidden;
     }
 
-    body .features {
+    body .features, body .stats {
         margin-top: -40px;
+    }
+
+    body .features {
+        padding-bottom: 240px;
+    }
+
+    body .stats .title {
+        margin-top: -10px;
     }
 }
 
@@ -45,7 +53,11 @@
         align-items: center;
     }
 
-    body .features {
+    body .features .content{
         margin-top: -30px;
+    }
+
+    body .stats {
+        margin-top: -8px;
     }
 }
