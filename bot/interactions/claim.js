@@ -2,6 +2,7 @@ const { SlashCommandBuilder } = require('@discordjs/builders');
 const { MessageEmbed } = require('discord.js');
 
 const Guild = require('../../db/models/guild');
+const { guildLog } = require('../../functions/bot');
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -34,6 +35,7 @@ module.exports = {
             .setTimestamp();
 
           interaction.reply({ embeds: [claimEmbed] });
+          guildLog(dbGuild.settings.log, interaction.user, `**${interaction.user.tag}** claimed a ticket (\`${dbTicket.id}\`).`, client);
         } else {
           const claimEmbed = new MessageEmbed()
             .setTitle('> Claim ticket')

@@ -5,7 +5,7 @@ const {
 
 /* Import files */
 const Guild = require('../../db/models/guild');
-const { createTranscript } = require('../../functions/bot');
+const { createTranscript, guildLog } = require('../../functions/bot');
 
 /* Export */
 module.exports = (interaction, client, dbGuild) => {
@@ -34,6 +34,7 @@ module.exports = (interaction, client, dbGuild) => {
         .setStyle('LINK'),
     );
 
+  guildLog(dbGuild.settings.log, interaction.user, `**${interaction.user.tag}** created a transcript of a ticket (\`${dbTicket.id}\`).`, client);
   return interaction.reply({
     embeds: [transcriptEmbed],
     ephemeral: true,

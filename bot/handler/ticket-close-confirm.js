@@ -5,7 +5,8 @@ const {
 
 /* Import files */
 const Guild = require('../../db/models/guild');
-const { createTranscript } = require('../../functions/bot');
+const { createTranscript, guildLog } = require('../../functions/bot');
+const { log } = require('../../functions/console');
 
 /* Export */
 module.exports = (interaction, client, dbGuild) => {
@@ -14,7 +15,9 @@ module.exports = (interaction, client, dbGuild) => {
   try {
     dbTicket.state = 'closed';
     Guild.findOneAndUpdate({ id: interaction.guild.id }, { tickets: dbGuild.tickets }).catch();
-  } catch (e) {}
+  } catch (e) {
+    log('', client, e);
+  }
 
   let errored = false;
 
@@ -26,7 +29,9 @@ module.exports = (interaction, client, dbGuild) => {
 
   try {
     interaction.channel.messages.cache.get(interaction.message.id).delete();
-  } catch (e) {}
+  } catch (e) {
+    log('', client, e);
+  }
 
   interaction.channel.send({ embeds: [deleteEmbed], ephemeral: false });
   if (dbGuild.settings.transcript.enabled) {
@@ -47,6 +52,7 @@ module.exports = (interaction, client, dbGuild) => {
     try {
       createTranscript(interaction.guild.id, dbTicket);
     } catch (e) {
+      log('', client, e);
       const errorEmbed = new MessageEmbed()
         .setTitle('> Ticket Transcript')
         .setColor('RED')
@@ -70,7 +76,9 @@ module.exports = (interaction, client, dbGuild) => {
     setTimeout(() => {
       try {
         interaction.channel.delete();
+        guildLog(dbGuild.settings.log, interaction.user, `**${interaction.user.tag}** deleted a ticket (\`${dbTicket.id}\`)`, client);
       } catch (e) {
+        log('', client, e);
         const errorEmbed = new MessageEmbed()
           .setTitle('Error')
           .setColor('RED')

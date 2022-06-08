@@ -1,10 +1,10 @@
 /* Import modules */
 import dotenv from 'dotenv';
 import { Client, Intents } from 'discord.js';
-dotenv.config();
 
 /* Misc */
 console.clear();
+dotenv.config();
 
 /* Import database */
 require('./db/main.js')();
@@ -18,7 +18,7 @@ const client = new Client({
 });
 
 const bot = async () => {
-    await require('./bot/main.js')(client);
+  await require('./bot/main.js')(client);
 }
 
 bot();

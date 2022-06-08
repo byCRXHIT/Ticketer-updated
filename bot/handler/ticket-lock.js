@@ -4,6 +4,7 @@ const {
 } = require('discord.js');
 
 const Guild = require('../../db/models/guild');
+const { guildLog } = require('../../functions/bot');
 
 /* Export */
 module.exports = async (interaction, client, dbGuild) => {
@@ -29,6 +30,7 @@ module.exports = async (interaction, client, dbGuild) => {
         .setFooter({ text: interaction.user.tag, iconURL: interaction.user.avatarURL({ dynamic: true }) });
 
       await interaction.reply({ embeds: [sucEmbed], ephemeral: false });
+      guildLog(dbGuild.settings.log, interaction.user, `**${interaction.user.tag}** locked a ticket (\`${dbTicket.id}\`).`, client);
     } else if (dbTicket.state == 'stopped') {
       dbTicket.members.forEach(async (member) => {
         const user = await interaction.guild.members.fetch(member.id);
@@ -46,6 +48,7 @@ module.exports = async (interaction, client, dbGuild) => {
         .setFooter({ text: interaction.user.tag, iconURL: interaction.user.avatarURL({ dynamic: true }) });
 
       await interaction.reply({ embeds: [sucEmbed], ephemeral: false });
+      guildLog(dbGuild.settings.log, interaction.user, `**${interaction.user.tag}** unlocked a ticket (\`${dbTicket.id}\`).`, client);
     } else {
       const errorEmbed = new MessageEmbed()
         .setTitle('> Lock ticket')

@@ -2,6 +2,7 @@ const { SlashCommandBuilder } = require('@discordjs/builders');
 const { MessageEmbed } = require('discord.js');
 
 const Guild = require('../../db/models/guild');
+const { guildLog } = require('../../functions/bot');
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -42,6 +43,7 @@ module.exports = {
             .setFooter({ text: interaction.user.tag, iconURL: interaction.user.avatarURL({ dynamic: true }) });
 
           await interaction.reply({ embeds: [sucEmbed], ephemeral: false });
+          guildLog(dbGuild.settings.log, interaction.user, `**${interaction.user.tag}** unlocked a ticket (\`${dbTicket.id}\`).`, client);
         } else {
           const errorEmbed = new MessageEmbed()
             .setTitle('> Unlock ticket')

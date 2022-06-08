@@ -17,7 +17,7 @@ const initialize = (app, v) => {
 
   // Setup session
   app.use(session({
-    cookie: { secure: true },
+    cookie: { secure: false },
     saveUninitialized: false,
     secret: 'This is a secret!',
     session: true,

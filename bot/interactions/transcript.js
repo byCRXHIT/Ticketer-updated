@@ -3,7 +3,7 @@ const {
   MessageEmbed, MessageActionRow, MessageButton, MessageSelectMenu,
 } = require('discord.js');
 
-const { createTranscript } = require('../../functions/bot');
+const { createTranscript, guildLog } = require('../../functions/bot');
 const Guild = require('../../db/models/guild');
 
 module.exports = {
@@ -48,6 +48,7 @@ module.exports = {
               .setStyle('LINK'),
           );
 
+        guildLog(dbGuild.settings.log, interaction.user, `**${interaction.user.tag}** created a transcript of a ticket (\`${dbTicket.id}\`).`, client);
         return interaction.reply({
           embeds: [transcriptEmbed],
           ephemeral: true,

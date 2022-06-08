@@ -12,6 +12,7 @@ const { FetchWebsite } = require('./util/fetchWebsite');
 /* Import modules */
 const { staffCommands } = require('../config.json');
 const Guild = require('../db/models/guild');
+const { log } = require('../functions/console');
 
 /* Export */
 
@@ -92,6 +93,7 @@ module.exports = (client) => {
         try {
           await command.execute(interaction, client);
         } catch (e) {
+          log(e, client, e);
           console.log(e);
         }
       }
@@ -107,7 +109,7 @@ module.exports = (client) => {
         try {
           require(`./handler/${interaction.customId}`)(interaction, client, dbGuild);
         } catch (e) {
-          console.log(e);
+          log(e, client, e);
         }
       } else return;
     });
@@ -120,7 +122,7 @@ module.exports = (client) => {
         require(`./handler/${interaction.customId}`)(interaction, client, dbGuild);
       });
     } catch (e) {
-      console.log(e);
+      log('', client, e);
     }
   });
 

@@ -76,12 +76,12 @@
         </div>
         <div class="setting">
             <h3 class="title">Log channel</h3>
-            <p class="description">The channel where transcript logs will be sent.</p>
-            <select name="whishlist" class="select inpset" id="channelSelect" disabled>
+            <p class="description">The channel where ticket logs will be sent.</p>
+            <select name="whishlist" class="select inpset" id="channelSelect">
                 <option value="none" class="option">- None -</option>
                 <% channels.forEach((channel) => { %>
                     <% let selected; %>
-                    <% if(db.settings.transcript.channel !== 'none' && channel.id == db.settings.transcript.channel) selected = 'selected'; %>
+                    <% if(db.settings.log !== 'none' && channel.id == db.settings.log) selected = 'selected'; %>
                     <option value="<%= channel.id %>" <%- selected %> class="option"><%= channel.name %></option>
                 <% }) %>
             </select>

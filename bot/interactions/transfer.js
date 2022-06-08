@@ -2,6 +2,7 @@ const { SlashCommandBuilder } = require('@discordjs/builders');
 const { MessageEmbed } = require('discord.js');
 
 const Guild = require('../../db/models/guild');
+const { guildLog } = require('../../functions/bot');
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -76,6 +77,7 @@ module.exports = {
 
           interaction.reply({ embeds: [transferEmbed], ephemeral: true });
           interaction.channel.send({ embeds: [transferMessageEmbed], ephemeral: false });
+          guildLog(dbGuild.settings.log, interaction.user, `**${interaction.user.tag}** transfered the ticket (\`${dbTicket.id}\`) to <@${user.id}>.`, client);
         } else {
           if (dbTicket.claimed == interaction.user.id) {
             const errorEmbed = new MessageEmbed()
@@ -107,6 +109,7 @@ module.exports = {
 
           interaction.reply({ embeds: [transferEmbed], ephemeral: true });
           interaction.channel.send({ embeds: [transferMessageEmbed], ephemeral: false });
+          guildLog(dbGuild.settings.log, interaction.user, `**${interaction.user.tag}** transfered the ticket (\`${dbTicket.id}\`) to <@${interaction.user.id}>.`, client);
         }
       } else {
         const errorEmbed = new MessageEmbed()

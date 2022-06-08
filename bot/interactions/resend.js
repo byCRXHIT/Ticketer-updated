@@ -7,6 +7,8 @@ const {
 } = require('discord.js');
 
 const Guild = require('../../db/models/guild');
+const { guildLog } = require('../../functions/bot');
+const { log } = require('../../functions/console');
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -42,7 +44,9 @@ module.exports = {
             dbGuild.settings.message,
           );
           msg.delete();
-        } catch (e) {}
+        } catch (e) {
+          log('', client, e);
+        }
 
         const message = await interaction.channel.send({
           embeds: [helpEmbed],
@@ -52,6 +56,7 @@ module.exports = {
         dbGuild.settings.message = message.id;
         dbGuild.settings.channel = interaction.channel.id;
         dbGuild.save();
+        guildLog(dbGuild.settings.log, interaction.user, `**${interaction.user.tag}** resended the ticket message.`, client);
       });
     } else {
       const errorEmbed = new MessageEmbed()

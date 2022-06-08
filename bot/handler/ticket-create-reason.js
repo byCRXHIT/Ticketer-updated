@@ -2,6 +2,10 @@
 const {
   MessageEmbed, MessageActionRow, MessageButton, MessageSelectMenu, TextInputComponent, Permissions,
 } = require('discord.js');
+const { guildLog } = require('../../functions/bot');
+
+/* Import files */
+const { log } = require('../../functions/console');
 
 /* Export */
 module.exports = async (interaction, client, dbGuild) => {
@@ -33,13 +37,13 @@ module.exports = async (interaction, client, dbGuild) => {
       });
     }
 
-    dbGuild.settings.staff.members.forEach((staff) => {
+    /* dbGuild.settings.staff.members.forEach((staff) => {
       permissions.push({
         id: staff,
         allow: ['VIEW_CHANNEL', 'READ_MESSAGE_HISTORY', 'SEND_MESSAGES', 'MANAGE_MESSAGES'],
         deny: [],
       });
-    });
+    }); */
   }
 
   /* if (dbGuild.settings.staff.role !== 'none') {
@@ -69,13 +73,7 @@ module.exports = async (interaction, client, dbGuild) => {
       return interaction.editReply({ embeds: [errorEmbed], ephemeral: true });
     }
 
-    try {
-      ticket = await interaction.guild.channels.create(dbGuild.settings.nameprefix.replace('{id}', dbGuild.ticketid), {
-        type: 'text',
-        permissionOverwrites: permissions,
-        parent: dbGuild.settings.category,
-      });
-    } catch (e) {
+    if (!interaction.guild.me.permissions.has([Permissions.FLAGS.MANAGE_CHANNELS])) {
       const errorEmbed = new MessageEmbed()
         .setTitle('Error')
         .setColor('RED')
@@ -84,6 +82,43 @@ module.exports = async (interaction, client, dbGuild) => {
         .setTimestamp();
 
       return interaction.editReply({ embeds: [errorEmbed], ephemeral: true });
+    }
+
+    if (dbGuild.settings.category == 'none') {
+      try {
+        ticket = await interaction.guild.channels.create(dbGuild.settings.nameprefix.replace('{id}', dbGuild.ticketid), {
+          type: 'text',
+          permissionOverwrites: permissions,
+        });
+      } catch (e) {
+        log('', client, e);
+        const errorEmbed = new MessageEmbed()
+          .setTitle('Error')
+          .setColor('RED')
+          .setDescription('An unknown error occurred while creating the ticket.')
+          .setFooter({ text: interaction.user.tag, iconURL: interaction.user.avatarURL({ dynamic: true }) })
+          .setTimestamp();
+
+        return interaction.editReply({ embeds: [errorEmbed], ephemeral: true });
+      }
+    } else {
+      try {
+        ticket = await interaction.guild.channels.create(dbGuild.settings.nameprefix.replace('{id}', dbGuild.ticketid), {
+          type: 'text',
+          permissionOverwrites: permissions,
+          parent: dbGuild.settings.category,
+        });
+      } catch (e) {
+        log('', client, e);
+        const errorEmbed = new MessageEmbed()
+          .setTitle('Error')
+          .setColor('RED')
+          .setDescription('An unknown error occurred while creating the ticket.')
+          .setFooter({ text: interaction.user.tag, iconURL: interaction.user.avatarURL({ dynamic: true }) })
+          .setTimestamp();
+
+        return interaction.editReply({ embeds: [errorEmbed], ephemeral: true });
+      }
     }
 
     if (!ticket) {
@@ -113,6 +148,7 @@ module.exports = async (interaction, client, dbGuild) => {
     try {
       ticket.permissionOverwrites.set(permissions);
     } catch (e) {
+      log('', client, e);
       const errorEmbed = new MessageEmbed()
         .setTitle('Error')
         .setColor('RED')
@@ -169,6 +205,7 @@ module.exports = async (interaction, client, dbGuild) => {
         embeds: [ticketEmbed], ephemeral: false, components: [row],
       });
     } catch (e) {
+      log('', client, e);
       const errorEmbed = new MessageEmbed()
         .setTitle('Error')
         .setColor('RED')
@@ -191,7 +228,11 @@ module.exports = async (interaction, client, dbGuild) => {
 
     try {
       interaction.editReply({ embeds: [successEmbed], ephemeral: true });
-    } catch (e) {}
+    } catch (e) {
+      log('', client, e);
+    }
+
+    guildLog(dbGuild.settings.log, interaction.user, `**${interaction.user.tag}** created a ticket (\`${dbGuild.ticketid}\`) with the reason \`${reason}\`.`, client);
 
     dbGuild.ticketid += 1;
     dbGuild.save();

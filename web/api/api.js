@@ -7,6 +7,7 @@ const {
 } = require('discord.js');
 
 const Guild = require('../../db/models/guild');
+const { log } = require('../../functions/console');
 
 module.exports = (app, client) => {
   passport.use(new DiscordStrategy(
@@ -152,7 +153,9 @@ module.exports = (app, client) => {
           const msg = await channel.messages.fetch(dbGuild.settings.message);
           msg.delete();
         }
-      } catch (e) {}
+      } catch (e) {
+        log('', client, e);
+      }
 
       dbGuild.settings.channel = value;
       dbGuild.save();
@@ -161,6 +164,7 @@ module.exports = (app, client) => {
 
       const createEmbed = new MessageEmbed()
         .setTitle('> Ticket')
+        .setColor('BLURPLE')
         .setDescription(dbGuild.settings.messages.create.replaceAll('\\n', '\n'))
         .setFooter({ text: client.user.tag, iconURL: client.user.avatarURL({ dynamic: true }) });
 
@@ -178,6 +182,7 @@ module.exports = (app, client) => {
         dbGuild.settings.message = message.id;
         dbGuild.save();
       } catch (e) {
+        log('', client, e);
         return;
       }
     });
@@ -238,6 +243,7 @@ module.exports = (app, client) => {
         if (channel) {
           const createEmbed = new MessageEmbed()
             .setTitle('> Ticket')
+            .setColor('BLURPLE')
             .setDescription(dbGuild.settings.messages.create.replaceAll('\\n', '\n'))
             .setFooter({ text: client.user.tag, iconURL: client.user.avatarURL({ dynamic: true }) });
 
@@ -253,7 +259,9 @@ module.exports = (app, client) => {
           const msg = await channel.messages.fetch(dbGuild.settings.message);
           msg.edit({ embeds: [createEmbed], components: [row] });
         }
-      } catch (e) {}
+      } catch (e) {
+        log('', client, e);
+      }
 
       res.json({ saved: true });
     });
@@ -293,14 +301,17 @@ module.exports = (app, client) => {
         if (channel) {
           const logEmbed = new MessageEmbed()
             .setTitle('> Log')
+            .setColor('BLURPLE')
             .setDescription('This channel has been set as the log channel.')
             .setFooter({ text: client.user.tag, iconURL: client.user.avatarURL({ dynamic: true }) });
 
           channel.send({ embeds: [logEmbed] });
         }
-      } catch (e) {}
+      } catch (e) {
+        log('', client, e);
+      }
 
-      dbGuild.settings.transcript.channel = value;
+      dbGuild.settings.log = value;
       dbGuild.save();
 
       res.json({ saved: true });
