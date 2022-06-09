@@ -50,8 +50,13 @@
     
     <div class="content">
         <div class="setting">
+            <h3 class="title">Bot nickname</h3>
+            <p class="description">The bots nickname for the selected server.</p>
+            <input id="nicknameInput" maxlength="30" class="textarea inpset" value="<%= nickname ? nickname : 'Ticketer' %>">
+        </div>
+        <div class="setting">
             <h3 class="title">Ticket name</h3>
-            <p class="description">What should the Ticket Channel be called? Placeholder: <b>{id}</b> the id of the ticket.</p>
+            <p class="description">What should the Ticket Channel be called? Placeholder: <b>{id}</b> the id of the ticket, <b>{user_name}</b> name of the user who created the ticket, <b>${user_tag}</b> the tag of the user who created the ticket</p>
             <input id="channelInput" maxlength="30" class="textarea inpset" value="<%= db.settings.nameprefix %>">
         </div>
         <div class="setting">

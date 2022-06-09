@@ -34,9 +34,25 @@ module.exports = (app, client) => {
 
   app.get('/commands', (req, res) => {
     let user = false;
+    let name = 'none';
+    if (req.query.name) name = `/${req.query.name}`;
     if (req.session.passport) user = req.session.passport.user;
     res.render(join(__dirname, '../views/commands.ejs'), {
       user,
+      name,
+    });
+  });
+
+  app.get('/documentation', (req, res) => {
+    let user = false;
+
+    let name = 'none.ejs';
+    if (fs.readdirSync(join(__dirname, '../views/docs')).filter((f) => f.endsWith('.ejs') && f == `${req.query.page}.ejs`).length > 0) name = `${req.query.page}.ejs`;
+
+    if (req.session.passport) user = req.session.passport.user;
+    res.render(join(__dirname, '../views/documentation.ejs'), {
+      user,
+      name,
     });
   });
 
@@ -190,6 +206,7 @@ module.exports = (app, client) => {
           db: dbGuild,
           categorys,
           channels,
+          nickname: guild.members.cache.get(client.user.id).nickname,
         });
       }, 200);
     });

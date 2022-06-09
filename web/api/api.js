@@ -118,6 +118,22 @@ module.exports = (app, client) => {
     res.json({ saved: true });
   });
 
+  app.post('/api/setting/nickname', async (req, res) => {
+    const { value, guildId, userId } = req.body;
+    if (!req.session.passport || userId !== req.session.passport.user.id) return res.redirect('/dashboard');
+    if (!guildId || !userId) return res.json({ saved: false });
+
+    Guild.findOne({ id: guildId }).then(async (dbGuild) => {
+      const guild = await client.guilds.fetch(guildId);
+
+      if (guild.me.permissions.has(Permissions.FLAGS.MANAGE_NICKNAMES)) {
+        guild.members.cache.get(client.user.id).setNickname(value);
+      }
+
+      res.json({ saved: true });
+    });
+  });
+
   app.post('/api/setting/name', async (req, res) => {
     const { value, guildId, userId } = req.body;
     if (!req.session.passport || userId !== req.session.passport.user.id) return res.redirect('/dashboard');

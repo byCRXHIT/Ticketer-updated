@@ -17,7 +17,7 @@ const initialize = (app, v) => {
 
   // Setup session
   app.use(session({
-    cookie: { secure: false },
+    cookie: { secure: !!process.env.CALLBACK_URL.includes('https') },
     saveUninitialized: false,
     secret: 'This is a secret!',
     session: true,

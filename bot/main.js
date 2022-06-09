@@ -80,48 +80,48 @@ module.exports = (client) => {
         ephemeral: true,
       });
     } else {
-    Guild.findOne({ id: interaction.guild.id }).then(async (dbGuild) => {
-      if (!dbGuild) {
-        const g = new Guild({
-          id: interaction.guild.id,
-          botJoined: (Date.now() / 1000) | 0,
-        });
+      Guild.findOne({ id: interaction.guild.id }).then(async (dbGuild) => {
+        if (!dbGuild) {
+          const g = new Guild({
+            id: interaction.guild.id,
+            botJoined: (Date.now() / 1000) | 0,
+          });
 
-        g.save();
-        dbGuild = g;
-      }
-
-      if (!interaction.isCommand()) return;
-
-      const command = client.interactions.get(interaction.commandName);
-
-      if (command) {
-        try {
-          await command.execute(interaction, client);
-        } catch (e) {
-          log(e, client, e);
-          console.log(e);
+          g.save();
+          dbGuild = g;
         }
-      }
-    });
-  }
+
+        if (!interaction.isCommand()) return;
+
+        const command = client.interactions.get(interaction.commandName);
+
+        if (command) {
+          try {
+            await command.execute(interaction, client);
+          } catch (e) {
+            log(e, client, e);
+            console.log(e);
+          }
+        }
+      });
+    }
   });
 
   // Button listener
   client.on('interactionCreate', async (interaction) => {
     if (!interaction.guild) {
     } else {
-    Guild.findOne({ id: interaction.guild.id }).then(async (dbGuild) => {
-      if (!dbGuild) return;
+      Guild.findOne({ id: interaction.guild.id }).then(async (dbGuild) => {
+        if (!dbGuild) return;
 
-      if (interaction.isButton() || interaction.isSelectMenu()) {
-        try {
-          require(`./handler/${interaction.customId}`)(interaction, client, dbGuild);
-        } catch (e) {
-          log(e, client, e);
-        }
-      } else return;
-    });
+        if (interaction.isButton() || interaction.isSelectMenu()) {
+          try {
+            require(`./handler/${interaction.customId}`)(interaction, client, dbGuild);
+          } catch (e) {
+            log(e, client, e);
+          }
+        } else return;
+      });
     }
   });
 

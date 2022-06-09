@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Ticketer - Easily manage users' concerns</title>
+    <meta name="keywords" content="ticketer, ticketer.developersdungeon.xyz, ticket, discord ticket, discord ticket bot, ticket bot, discord, ticket discord">
+    <meta name="description" content="With ticketer you can easily manage the concerns of your server members at any time. Very uncomplicated and with many possibilities!">
+    <meta name="author" content="Developer Dungeon Studios">
+
+    <link rel="stylesheet" href="/assets/css/documentation.css">
+    <link rel="stylesheet" href="/assets/css/partials/navbar.css">
+    <link rel="stylesheet" href="/assets/css/partials/sidenav.css">
+    <link rel="stylesheet" href="/assets/css/partials/footer.css">
+    <link href='https://unpkg.com/boxicons@2.1.2/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="shortcut icon" href="/assets/img/logo-round.webp" type="image/x-icon">
+</head>
+<body class>
+    <%- include('./partials/navbar.ejs') %>
+    <script src="https://unpkg.com/@popperjs/core@2/dist/umd/popper.min.js"></script>
+    <script src="https://unpkg.com/tippy.js@6/dist/tippy-bundle.umd.js"></script>
+    
+    <div class="sidenav">
+        <div class="info">
+            <h3 class="name">Documentation</h3>
+        </div>
+        <div class="links">
+            <p class="title">Getting started</p>
+            <a href="/documentation?page=invite-the-bot" class="item"><i class='bx bx-link' ></i> Invite the bot</a>
+            <a href="/documentation?page=setup-bot" class="item"><i class='bx bx-link' ></i> Setup bot</a>
+        </div>
+    </div>
+    <div class="sidenav-small">
+        <a href="/documentation" class="item active"><i class='bx bx-stats' ></i> Invite the bot</a>
+    </div>
+
+    <div class="content">
+        <%- include(`./docs/${name}`) %>
+    </div>
+
+    <script src="/assets/js/partials/navbar.js"></script>
+</body>
+</html>

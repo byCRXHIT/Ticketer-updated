@@ -5,5 +5,7 @@ const {
 
 /* Export */
 module.exports = (interaction, client, dbGuild) => {
-  interaction.channel.messages.cache.get(interaction.message.id).delete();
+  try {
+    interaction.channel.messages.cache.get(interaction.message.id).delete();
+  } catch (e) {}
 };

@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 let amount = [0, 0, 0, 0, 0, 0, 0];
 
 tickets.sort((a, b) => {
@@ -14,7 +15,7 @@ tickets.forEach((t) => {
   week.setDate(today.getDate() - 7);
 
   let difference = Math.round(
-    (created.getTime() - week.getTime()) / (1000 * 3600 * 24)
+    (created.getTime() - week.getTime()) / (1000 * 3600 * 24),
   );
   if (difference < 0) return;
 
@@ -26,7 +27,7 @@ lastTickets.forEach((t) => {
   let created = new Date(t.created);
 
   let difference = Math.round(
-    (today.getTime() - created.getTime()) / (1000 * 3600 * 24)
+    (today.getTime() - created.getTime()) / (1000 * 3600 * 24),
   );
 
   if (difference == 0) {
@@ -47,27 +48,27 @@ lastTickets.forEach((t) => {
 });
 
 function formatDate(date) {
-  var dd = date.getDate();
-  var mm = date.getMonth() + 1;
-  var yyyy = date.getFullYear();
+  let dd = date.getDate();
+  let mm = date.getMonth() + 1;
+  let yyyy = date.getFullYear();
   if (dd < 10) {
-    dd = "0" + dd;
+    dd = `0${dd}`;
   }
   if (mm < 10) {
-    mm = "0" + mm;
+    mm = `0${mm}`;
   }
-  date = mm + "." + dd + "." + yyyy;
+  date = `${mm}.${dd}.${yyyy}`;
   return date;
 }
 
 function getDates() {
-  var today = new Date();
-  var oneDayAgo = new Date(today);
-  var twoDaysAgo = new Date(today);
-  var threeDaysAgo = new Date(today);
-  var fourDaysAgo = new Date(today);
-  var fiveDaysAgo = new Date(today);
-  var sixDaysAgo = new Date(today);
+  let today = new Date();
+  let oneDayAgo = new Date(today);
+  let twoDaysAgo = new Date(today);
+  let threeDaysAgo = new Date(today);
+  let fourDaysAgo = new Date(today);
+  let fiveDaysAgo = new Date(today);
+  let sixDaysAgo = new Date(today);
 
   oneDayAgo.setDate(today.getDate() - 1);
   twoDaysAgo.setDate(today.getDate() - 2);
@@ -76,7 +77,7 @@ function getDates() {
   fiveDaysAgo.setDate(today.getDate() - 5);
   sixDaysAgo.setDate(today.getDate() - 6);
 
-  var result0 = formatDate(today);
+  let result0 = formatDate(today);
   result1 = formatDate(oneDayAgo);
   result2 = formatDate(twoDaysAgo);
   result3 = formatDate(threeDaysAgo);
@@ -91,51 +92,51 @@ const data = {
   labels: getDates(),
   datasets: [
     {
-      label: "Tickets",
+      label: 'Tickets',
       data: amount,
       fill: false,
-      borderColor: "rgb(255, 255, 255)",
+      borderColor: 'rgb(255, 255, 255)',
       tension: 0,
     },
   ],
 };
 
 const config = {
-  type: "line",
-  data: data,
+  type: 'line',
+  data,
   options: {
     legend: {
-        display: false
+      display: false,
     },
     scales: {
       yAxes: [
         {
-          id: "y-axis-1",
-          type: "linear",
+          id: 'y-axis-1',
+          type: 'linear',
           display: true,
-          position: "left",
+          position: 'left',
           ticks: {
             beginAtZero: true,
-            userCallback: function (label, index, labels) {
+            userCallback(label, index, labels) {
               if (Math.floor(label) === label) {
                 return label;
               }
             },
           },
           gridLines: {
-            color: "rgba(255, 255, 255, .1)",
-          }  
-        }
+            color: 'rgba(255, 255, 255, .1)',
+          },
+        },
       ],
       xAxes: [
         {
           gridLines: {
-            color: "rgba(255, 255, 255, .1)",
-          }  
-        }
-      ]
+            color: 'rgba(255, 255, 255, .1)',
+          },
+        },
+      ],
     },
   },
 };
 
-const ticketChart = new Chart(document.getElementById("tickets"), config);
+const ticketChart = new Chart(document.getElementById('tickets'), config);

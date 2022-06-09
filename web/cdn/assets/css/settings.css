@@ -186,9 +186,10 @@ body .saveChanges {
     border-radius: 8px;
     position: fixed;
     width: fit-content;
-    right: 10px;
+    right: 20px;
     bottom: 10px;
     z-index: 99999;
+    max-width: 85vw;
 }
 
 body .saveChanges.active {
@@ -231,6 +232,7 @@ body .saveChanges .button {
     font-display: swap;
     transition: ease-in-out .2s;
     margin-right: 6px;
+    margin-left: 16px;
     justify-self: flex-end;
 }
 

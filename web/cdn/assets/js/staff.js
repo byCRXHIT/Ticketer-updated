@@ -1,65 +1,66 @@
+/* eslint-disable no-undef */
 let amount = [];
 let names = [];
 
-console.log(staff)
+console.log(staff);
 
 staff.forEach(async (staff) => {
-  if(!names.includes(staff.user.tag)) {
+  if (!names.includes(staff.user.tag)) {
     names.push(staff.user.tag);
-    amount.push(staff.tickets)
+    amount.push(staff.tickets);
   }
-})
+});
 
 const data = {
   labels: names,
   datasets: [
     {
-      label: "Tickets",
+      label: 'Tickets',
       data: amount,
       fill: false,
-      borderColor: "rgb(255, 255, 255)",
+      borderColor: 'rgb(255, 255, 255)',
       tension: 0,
-      backgroundColor: "#5865F2",
+      backgroundColor: '#5865F2',
     },
   ],
 };
 
 const config = {
-  type: "bar",
-  data: data,
+  type: 'bar',
+  data,
   options: {
     legend: {
-        display: false
+      display: false,
     },
     scales: {
       yAxes: [
         {
-          id: "y-axis-1",
-          type: "linear",
+          id: 'y-axis-1',
+          type: 'linear',
           display: true,
-          position: "left",
+          position: 'left',
           ticks: {
             beginAtZero: true,
-            userCallback: function (label, index, labels) {
+            userCallback(label, index, labels) {
               if (Math.floor(label) === label) {
                 return label;
               }
             },
           },
           gridLines: {
-            color: "rgba(255, 255, 255, .1)",
-          }  
-        }
+            color: 'rgba(255, 255, 255, .1)',
+          },
+        },
       ],
       xAxes: [
         {
           gridLines: {
-            color: "rgba(255, 255, 255, .1)",
-          }  
-        }
-      ]
+            color: 'rgba(255, 255, 255, .1)',
+          },
+        },
+      ],
     },
   },
 };
 
-const ticketChart = new Chart(document.getElementById("tickets"), config);
+const ticketChart = new Chart(document.getElementById('tickets'), config);
