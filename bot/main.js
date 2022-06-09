@@ -74,6 +74,12 @@ module.exports = (client) => {
 
   // Listen for slash commands
   client.on('interactionCreate', async (interaction) => {
+    if (!interaction.guild) {
+      interaction.reply({
+        content: 'You need to be in a server to use this command.',
+        ephemeral: true,
+      });
+    } else {
     Guild.findOne({ id: interaction.guild.id }).then(async (dbGuild) => {
       if (!dbGuild) {
         const g = new Guild({
@@ -98,10 +104,13 @@ module.exports = (client) => {
         }
       }
     });
+  }
   });
 
   // Button listener
   client.on('interactionCreate', async (interaction) => {
+    if (!interaction.guild) {
+    } else {
     Guild.findOne({ id: interaction.guild.id }).then(async (dbGuild) => {
       if (!dbGuild) return;
 
@@ -113,6 +122,7 @@ module.exports = (client) => {
         }
       } else return;
     });
+    }
   });
 
   client.on('modalSubmit', async (interaction) => {
