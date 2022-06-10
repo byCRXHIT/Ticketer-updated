@@ -19,7 +19,7 @@ module.exports = async (interaction, client, dbGuild) => {
   let permissions = [
     { id: client.user.id, allow: ['VIEW_CHANNEL', 'READ_MESSAGE_HISTORY', 'SEND_MESSAGES', 'MANAGE_MESSAGES'], deny: [] },
     { id: interaction.member.id, allow: ['VIEW_CHANNEL', 'READ_MESSAGE_HISTORY', 'SEND_MESSAGES'], deny: [] },
-    { id: interaction.guild.roles.everyone, deny: ['VIEW_CHANNEL'] },
+    { id: interaction.guild.roles.everyone.id, deny: ['VIEW_CHANNEL'] },
   ];
 
   if (dbGuild.options[Number(interaction.values[0])].permissions !== 'none') {
@@ -46,14 +46,6 @@ module.exports = async (interaction, client, dbGuild) => {
     }); */
   }
 
-  /* if (dbGuild.settings.staff.role !== 'none') {
-    permissions.push({
-      id: dbGuild.settings.staff.role,
-      allow: ['VIEW_CHANNEL', 'READ_MESSAGE_HISTORY', 'SEND_MESSAGES', 'MANAGE_MESSAGES'],
-      deny: [],
-    });
-  } */
-
   try {
     interaction.reply({ embeds: [waitEmbed], ephemeral: true });
   } catch (e) {
@@ -62,36 +54,41 @@ module.exports = async (interaction, client, dbGuild) => {
 
   setTimeout(async () => {
     let ticket;
-    if (!interaction.guild.me.permissions.has([Permissions.FLAGS.MANAGE_CHANNELS])) {
+    if (!interaction.guild.me.permissions.has([Permissions.FLAGS.MANAGE_CHANNELS, Permissions.FLAGS.MANAGE_ROLES, Permissions.FLAGS.MANAGE_GUILD])) {
       const errorEmbed = new MessageEmbed()
         .setTitle('Error')
         .setColor('RED')
-        .setDescription('I don\'t have permission to create a channel')
+        .setDescription('I don\'t have permission to create a channel. I need the permissions `MANAGE_ROLES`, `MANAGE_GUILD` and `MANAGE_CHANNELS`.')
         .setFooter({ text: interaction.user.tag, iconURL: interaction.user.avatarURL({ dynamic: true }) })
         .setTimestamp();
 
       return interaction.editReply({ embeds: [errorEmbed], ephemeral: true });
     }
 
-    if (!interaction.guild.me.permissions.has([Permissions.FLAGS.MANAGE_CHANNELS])) {
+    if (!interaction.guild.me.permissions.has([Permissions.FLAGS.MANAGE_CHANNELS, Permissions.FLAGS.MANAGE_ROLES, Permissions.FLAGS.MANAGE_GUILD])) {
       const errorEmbed = new MessageEmbed()
         .setTitle('Error')
         .setColor('RED')
-        .setDescription('I don\'t have permission to create a channel')
+        .setDescription('I don\'t have permission to create a channel. I need the permissions `MANAGE_ROLES`, `MANAGE_GUILD` and `MANAGE_CHANNELS`.')
         .setFooter({ text: interaction.user.tag, iconURL: interaction.user.avatarURL({ dynamic: true }) })
         .setTimestamp();
 
       return interaction.editReply({ embeds: [errorEmbed], ephemeral: true });
+    }
+
+    if(!dbGuild.settings.nameprefix) {
+      dbGuild.settings.nameprefix = 'ticket-${id}';
+      dbGuild.save();
     }
 
     if (dbGuild.settings.category == 'none') {
       try {
-        ticket = await interaction.guild.channels.create(dbGuild.settings.nameprefix.replace('{id}', dbGuild.ticketid), {
+        ticket = await interaction.guild.channels.create(dbGuild.settings.nameprefix.replaceAll('{id}', dbGuild.ticketid).replaceAll('{user_name}', interaction.user.username).replaceAll('{user_tag}', interaction.user.tag.replace(interaction.user.username + '#', '')), {
           type: 'text',
           permissionOverwrites: permissions,
         });
       } catch (e) {
-        log('', client, e);
+        log('', client, e, interaction.guild.id, interaction.user.id, interaction.channel.id, interaction.commandName);
         const errorEmbed = new MessageEmbed()
           .setTitle('Error')
           .setColor('RED')
@@ -103,13 +100,13 @@ module.exports = async (interaction, client, dbGuild) => {
       }
     } else {
       try {
-        ticket = await interaction.guild.channels.create(dbGuild.settings.nameprefix.replace('{id}', dbGuild.ticketid), {
+        ticket = await interaction.guild.channels.create(dbGuild.settings.nameprefix.replaceAll('{id}', dbGuild.ticketid).replaceAll('{user_name}', interaction.user.username).replaceAll('{user_tag}', interaction.user.tag.replace(interaction.user.username + '#', '')), {
           type: 'text',
           permissionOverwrites: permissions,
           parent: dbGuild.settings.category,
         });
       } catch (e) {
-        log('', client, e);
+        log('', client, e, interaction.guild.id, interaction.user.id, interaction.channel.id, interaction.commandName);
         const errorEmbed = new MessageEmbed()
           .setTitle('Error')
           .setColor('RED')
@@ -132,23 +129,13 @@ module.exports = async (interaction, client, dbGuild) => {
       return interaction.editReply({ embeds: [errorEmbed], ephemeral: true });
     }
 
-    /* try {
-      await ticket.setParent(dbGuild.settings.category);
-    } catch (e) {
-      const errorEmbed = new MessageEmbed()
-        .setTitle('Error')
-        .setColor('RED')
-        .setDescription('I don\'t have permission to set the parent of this channel.')
-        .setFooter({ text: interaction.user.tag, iconURL: interaction.user.avatarURL({ dynamic: true }) })
-        .setTimestamp();
-
-      return interaction.editReply({ embeds: [errorEmbed], ephemeral: true });
-    } */
-
     try {
-      ticket.permissionOverwrites.set(permissions);
+      let channel = await client.channels.fetch(ticket.id);
+      if(channel) {
+        channel.permissionOverwrites.set(permissions);
+      } else throw new Error('Channel not found');
     } catch (e) {
-      log('', client, e);
+      log('', client, e, interaction.guild.id, interaction.user.id, interaction.channel.id, interaction.commandName);
       const errorEmbed = new MessageEmbed()
         .setTitle('Error')
         .setColor('RED')
@@ -201,15 +188,41 @@ module.exports = async (interaction, client, dbGuild) => {
       } else if (dbGuild.settings.staff.role !== 'none') {
         ticket.send(`<@&${dbGuild.options[Number(interaction.values[0])].permissions}>`);
       }
-      msg = await ticket.send({
-        embeds: [ticketEmbed], ephemeral: false, components: [row],
-      });
     } catch (e) {
-      log('', client, e);
+      log('', client, e, interaction.guild.id, interaction.user.id, interaction.channel.id, interaction.commandName);
       const errorEmbed = new MessageEmbed()
         .setTitle('Error')
         .setColor('RED')
         .setDescription('I don\'t have permission to send messages to this tickets.')
+        .setFooter({ text: interaction.user.tag, iconURL: interaction.user.avatarURL({ dynamic: true }) })
+        .setTimestamp();
+
+      return interaction.editReply({ embeds: [errorEmbed], ephemeral: true });
+    }
+
+    try {
+      let channel = await client.channels.fetch(ticket.id);
+      if(channel) {
+        msg = await channel.send({
+          embeds: [ticketEmbed], ephemeral: false, components: [row],
+        });
+      } else throw new Error('Channel not found');
+      if(!msg) {
+        const errorEmbed = new MessageEmbed()
+          .setTitle('Error')
+          .setColor('RED')
+          .setDescription('An unknown error occurred while sending the ticket.')
+          .setFooter({ text: interaction.user.tag, iconURL: interaction.user.avatarURL({ dynamic: true }) })
+          .setTimestamp();
+
+        return interaction.editReply({ embeds: [errorEmbed], ephemeral: true });
+      }
+    } catch (e) {
+      log(e, client, e, interaction.guild.id, interaction.user.id, interaction.channel.id, interaction.commandName);
+      const errorEmbed = new MessageEmbed()
+        .setTitle('Error')
+        .setColor('RED')
+        .setDescription('An unknown error occurred while sending the ticket.')
         .setFooter({ text: interaction.user.tag, iconURL: interaction.user.avatarURL({ dynamic: true }) })
         .setTimestamp();
 
@@ -229,7 +242,7 @@ module.exports = async (interaction, client, dbGuild) => {
     try {
       interaction.editReply({ embeds: [successEmbed], ephemeral: true });
     } catch (e) {
-      log('', client, e);
+      log('', client, e, interaction.guild.id, interaction.user.id, interaction.channel.id, interaction.commandName);
     }
 
     guildLog(dbGuild.settings.log, interaction.user, `**${interaction.user.tag}** created a ticket (\`${dbGuild.ticketid}\`) with the reason \`${reason}\`.`, client);

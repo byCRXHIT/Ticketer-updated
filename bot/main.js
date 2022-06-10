@@ -99,7 +99,7 @@ module.exports = (client) => {
           try {
             await command.execute(interaction, client);
           } catch (e) {
-            log(e, client, e);
+            log(e, client, e, interaction.guild.id, interaction.user.id, interaction.channel.id, interaction.commandName);
             console.log(e);
           }
         }
@@ -118,7 +118,7 @@ module.exports = (client) => {
           try {
             require(`./handler/${interaction.customId}`)(interaction, client, dbGuild);
           } catch (e) {
-            log(e, client, e);
+            log(e, client, e, interaction.guild.id, interaction.user.id, interaction.channel.id, interaction.customId);
           }
         } else return;
       });
@@ -132,7 +132,7 @@ module.exports = (client) => {
         require(`./handler/${interaction.customId}`)(interaction, client, dbGuild);
       });
     } catch (e) {
-      log('', client, e);
+      log('', client, e, interaction.guild.id, interaction.user.id, interaction.channel.id, interaction.customId);
     }
   });
 

@@ -41,7 +41,7 @@ module.exports = {
         .setStyle('LINK'),
       new MessageButton()
         .setLabel('Invite')
-        .setURL('https://discord.com/api/oauth2/authorize?client_id=977591057711792178&permissions=139855260752&scope=bot%20applications.commands')
+        .setURL('https://discord.com/api/oauth2/authorize?client_id=977591057711792178&permissions=137909037169&scope=bot%20applications.commands')
         .setStyle('LINK'),
       new MessageButton()
         .setLabel('Github')

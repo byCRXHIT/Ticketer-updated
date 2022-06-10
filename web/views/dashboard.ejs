@@ -28,7 +28,7 @@
                 <% if(guild.joined) { %>
                     <a href="/dashboard/<%= guild.id %>" class="button">Dashboard</a>
                 <% } else { %>
-                    <a href="https://discord.com/api/oauth2/authorize?client_id=977591057711792178&permissions=139855260752&redirect_uri=https%3A%2F%2Fticketer.developersdungeon.xyz%2Fdashboard&response_type=code&scope=bot%20applications.commands%20guilds&guild_id=<%= guild.id %>" class="button invite">Invite</a>
+                    <a href="https://discord.com/api/oauth2/authorize?client_id=977591057711792178&permissions=137909037169&scope=bot%20applications.commands%20guilds&guild_id=<%= guild.id %>" class="button invite">Invite</a>
                 <% } %>
             </div>
             <% if(guildCount >= 3) { %>

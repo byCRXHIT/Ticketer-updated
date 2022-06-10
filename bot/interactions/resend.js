@@ -39,13 +39,15 @@ module.exports = {
 
         interaction.deferReply();
         interaction.deleteReply();
-        try {
-          const msg = await interaction.channel.messages.fetch(
-            dbGuild.settings.message,
-          );
-          msg.delete();
-        } catch (e) {
-          log('', client, e);
+        if(dbGuild.settings.message !== 'none') {
+          try {
+            const msg = await interaction.channel.messages.fetch(
+              dbGuild.settings.message,
+            );
+            msg.delete();
+          } catch (e) {
+            log('', client, e, interaction.commandName);
+          }
         }
 
         const message = await interaction.channel.send({

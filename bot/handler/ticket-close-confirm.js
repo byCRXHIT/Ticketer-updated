@@ -16,7 +16,7 @@ module.exports = (interaction, client, dbGuild) => {
     dbTicket.state = 'closed';
     Guild.findOneAndUpdate({ id: interaction.guild.id }, { tickets: dbGuild.tickets }).catch();
   } catch (e) {
-    log('', client, e);
+    log('', client, e, interaction.guild.id, interaction.user.id, interaction.channel.id, interaction.commandName);
   }
 
   let errored = false;
@@ -30,7 +30,7 @@ module.exports = (interaction, client, dbGuild) => {
   try {
     interaction.channel.messages.cache.get(interaction.message.id).delete();
   } catch (e) {
-    log('', client, e);
+    log('', client, e, interaction.guild.id, interaction.user.id, interaction.channel.id, interaction.commandName);
   }
 
   interaction.channel.send({ embeds: [deleteEmbed], ephemeral: false });
@@ -52,7 +52,7 @@ module.exports = (interaction, client, dbGuild) => {
     try {
       createTranscript(interaction.guild.id, dbTicket);
     } catch (e) {
-      log('', client, e);
+      log('', client, e, interaction.guild.id, interaction.user.id, interaction.channel.id, interaction.commandName);
       const errorEmbed = new MessageEmbed()
         .setTitle('> Ticket Transcript')
         .setColor('RED')
@@ -78,7 +78,7 @@ module.exports = (interaction, client, dbGuild) => {
         interaction.channel.delete();
         guildLog(dbGuild.settings.log, interaction.user, `**${interaction.user.tag}** deleted a ticket (\`${dbTicket.id}\`)`, client);
       } catch (e) {
-        log('', client, e);
+        log('', client, e, interaction.guild.id, interaction.user.id, interaction.channel.id, interaction.commandName);
         const errorEmbed = new MessageEmbed()
           .setTitle('Error')
           .setColor('RED')

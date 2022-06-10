@@ -79,8 +79,13 @@
     </div>
 
     <script>
-        let staff = JSON.parse('<%- JSON.stringify(staff) %>');
+        let staff = [];
     </script>
+    <% staff.forEach(s => { %>
+        <script class="ticket-script">
+            staff.push(JSON.parse('<%- JSON.stringify(s) %>'));
+        </script>
+    <% }) %>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
     <script src="/assets/js/partials/navbar.js"></script>
     <script src="/assets/js/staff.js"></script>

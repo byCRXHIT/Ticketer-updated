@@ -70,8 +70,15 @@
     </div>
 
     <script>
-        const tickets = JSON.parse('<%- JSON.stringify(db.tickets) %>');
+        const tickets = [];
     </script>
+    <% db.tickets.forEach(ticket => { %>
+        <script class="ticket-script">
+            tickets.push({
+                created: '<%- ticket.created %>'
+            });
+        </script>
+    <% }) %>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
     <script src="/assets/js/partials/navbar.js"></script>
     <script src="/assets/js/server.js"></script>

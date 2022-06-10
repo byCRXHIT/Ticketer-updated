@@ -2,8 +2,6 @@
 let amount = [];
 let names = [];
 
-console.log(staff);
-
 staff.forEach(async (staff) => {
   if (!names.includes(staff.user.tag)) {
     names.push(staff.user.tag);
@@ -64,3 +62,4 @@ const config = {
 };
 
 const ticketChart = new Chart(document.getElementById('tickets'), config);
+document.querySelectorAll('.ticket-script').forEach((elem) => elem.remove())

@@ -140,3 +140,4 @@ const config = {
 };
 
 const ticketChart = new Chart(document.getElementById('tickets'), config);
+document.querySelectorAll('.ticket-script').forEach((elem) => elem.remove())

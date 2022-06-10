@@ -165,12 +165,12 @@ module.exports = (app, client) => {
 
       try {
         const channel = await guild.channels.fetch(dbGuild.settings.channel);
-        if (channel) {
+        if (channel && dbGuild.settings.message !== 'none') {
           const msg = await channel.messages.fetch(dbGuild.settings.message);
           msg.delete();
         }
       } catch (e) {
-        log('', client, e);
+        log('', client, e, guildId, userId, 'dashboard', '/api/settings/channel');
       }
 
       dbGuild.settings.channel = value;
@@ -198,7 +198,7 @@ module.exports = (app, client) => {
         dbGuild.settings.message = message.id;
         dbGuild.save();
       } catch (e) {
-        log('', client, e);
+        log('', client, e, guildId, userId, 'dashboard', '/api/settings/channel');
         return;
       }
     });
@@ -272,11 +272,13 @@ module.exports = (app, client) => {
                 .setStyle('SUCCESS'),
             );
 
+          if(dbGuild.settings.message !== 'none') {
           const msg = await channel.messages.fetch(dbGuild.settings.message);
           msg.edit({ embeds: [createEmbed], components: [row] });
+          }
         }
       } catch (e) {
-        log('', client, e);
+        log('', client, e, guildId, userId, 'dashboard', '/api/settings/message');
       }
 
       res.json({ saved: true });
@@ -324,7 +326,7 @@ module.exports = (app, client) => {
           channel.send({ embeds: [logEmbed] });
         }
       } catch (e) {
-        log('', client, e);
+        log('', client, e, guildId, userId, 'dashboard', '/api/settings/channel');
       }
 
       dbGuild.settings.log = value;

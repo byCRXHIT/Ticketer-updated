@@ -37,8 +37,6 @@ const saveReason = () => {
 
   if (reasons.length < document.querySelectorAll('.tableContent tr').length) return;
 
-  console.log(reasons);
-
   fetch('/api/setting/permissions/reasons', {
     method: 'POST',
     headers: {
