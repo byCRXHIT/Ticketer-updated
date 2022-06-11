@@ -11,3 +11,6 @@ Video on how to use is comming up soon!
 - `npm start`
 - Now invite the bot using the invite in the .env file. **Note: Change the "APPLICATION_ID" in the link to your Bot ID!**
 - Your bot should now be ready to go!
+
+## Known issues:
+- console.js spitting errors out after changing ticket channel
