@@ -13,4 +13,6 @@ Video on how to use is comming up soon!
 - Your bot should now be ready to go!
 
 ## Known Issues:
-- Reasons are buggy - only 1 out of many setted reasons will work.
+### Reasons are buggy:
+- only 1 out of many setted reasons will work.
+- Error: "Reasons: TypeError [INVALID_TYPE]: Supplied parameter is not a User nor a Role."
