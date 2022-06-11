@@ -3,11 +3,12 @@ const express = require('express');
 const session = require('express-session');
 const MoongoStore = require('connect-mongo');
 const cors = require('cors');
+require('dotenv').config();
 
 /* Functions */
 const initialize = (app, v) => {
   // Set port
-  app.listen(7080);
+  app.listen(process.env.PORT);
 
   // Set viewengine
   app.set('view engine', 'ejs');

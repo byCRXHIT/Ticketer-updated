@@ -1,4 +1,5 @@
 const { MessageEmbed } = require('discord.js');
+require('dotenv').config();
 
 module.exports = {
   log: (message, client, messageBlank, guild, user, channel, location) => {
@@ -19,7 +20,7 @@ module.exports = {
         .addField('Location', '`' + location + '`')
         .setTimestamp();
 
-      client.channels.cache.get('984189364655501403').send({ embeds: [consoleEmbed] });
+      client.channels.cache.get(process.env.LOG_CHANNEL).send({ embeds: [consoleEmbed] });
     }
   },
 };

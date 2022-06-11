@@ -32,6 +32,8 @@ DEVGUILD_ID=
 CLIENT_SECRET=
 DEVELOPERSDUNGEON=
 CALLBACK_URL=
+LOG_CHANNEL=
+PORT=
 ```
 If you are unsure on how to get certaint values for the .env open a ticket on our [support server](https://discord.gg/KfBkKKydfg)
 
