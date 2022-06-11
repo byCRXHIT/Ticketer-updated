@@ -1,5 +1,7 @@
-### Warning: This isn't a fully working version. I am currently working really hard to make it fully working.
+### ⚠ Warning: This isn't a fully working version. I am currently working really hard to make it fully working. ⚠
+### Pull request are always welcome.
 
+<br>
 Note: Please use NodeJS Version 16.
 Video on how to use is comming up soon!
 
@@ -15,3 +17,4 @@ Video on how to use is comming up soon!
 
 ## Known issues:
 - console.js spitting errors out after changing ticket channel & saving
+- Ticket won't create.
