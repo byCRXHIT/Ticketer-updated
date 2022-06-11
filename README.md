@@ -16,5 +16,4 @@ Video on how to use is comming up soon!
 - Your bot should now be ready to go!
 
 ## Known issues:
-- console.js spitting errors out after changing ticket channel & saving
 - Ticket won't create.
