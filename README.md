@@ -13,4 +13,4 @@ Video on how to use is comming up soon!
 - Your bot should now be ready to go!
 
 ## Known Issues:
-- console.js spitting out errors
+- console.js spitting out errors (e.g. saving settings after changed)
