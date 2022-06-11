@@ -13,4 +13,4 @@ Video on how to use is comming up soon!
 - Your bot should now be ready to go!
 
 ## Known Issues:
-- Reasons are buggy - only 1 of many setted reasonw will work.
+- Reasons are buggy - only 1 out of many setted reasons will work.
