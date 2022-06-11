@@ -1,4 +1,5 @@
 const { MessageEmbed } = require('discord.js');
+require('dotenv').config();
 
 /* Import Modules */
 const fetch = (...args) => import('node-fetch').then(({ default: fetch }) => fetch(...args));
@@ -7,7 +8,7 @@ function createTranscript(id, ticket) {
   let t = ticket;
   if(!t || !t.members) return null;
   t.members.sort();
-  fetch('http://localhost:7080/api/ticket/create', {
+  fetch(`${process.env.WEBSITE}/api/ticket/create`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

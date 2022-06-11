@@ -3,6 +3,7 @@ const {
   MessageEmbed, MessageActionRow, Permissions, MessageButton,
 } = require('discord.js');
 const Guild = require('../../db/models/guild');
+require('dotenv').config();
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -45,7 +46,7 @@ module.exports = {
             new MessageButton()
               .setDisabled(false)
               .setLabel('Dashboard')
-              .setURL(`https://ticketer.developersdungeon.xyz/dashboard/${interaction.guild.id}`)
+              .setURL(`${process.env.WEBSITE}/dashboard/${interaction.guild.id}`)
               .setStyle('LINK'),
           );
 

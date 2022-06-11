@@ -1,5 +1,6 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
 const { MessageEmbed, version: djsversion } = require('discord.js');
+require('dotenv').config();
 
 const os = require('os');
 const Guild = require('../../db/models/guild');
@@ -43,7 +44,7 @@ module.exports = {
             [
               '**<:right:977610957985558628>  Developer Team:** [Developers Dungeon Studios](https://developersdungeon.xyz/)',
               '**<:right:977610957985558628>  Discord:** [Invite](https://discord.gg/KfBkKKydfg)',
-              '**<:right:977610957985558628>  Client:** [Ticketer Invite](https://discord.com/api/oauth2/authorize?client_id=977591057711792178&permissions=137909037169&scope=bot%20applications.commands)',
+              `**<:right:977610957985558628>  Client:** [Ticketer Invite](${process.env.INVITE_LINK})`,
               `**<:right:977610957985558628>  Servers:** ${client.guilds.cache.size.toLocaleString()} `,
               `**<:right:977610957985558628>  Bot Joined** <t:${botJoinInt}:f>`,
               `**<:right:977610957985558628>  Users:** ${client.guilds.cache

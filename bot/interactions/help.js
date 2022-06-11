@@ -1,5 +1,6 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
 const { MessageEmbed, MessageActionRow, MessageButton } = require('discord.js');
+require('dotenv').config();
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -26,7 +27,7 @@ module.exports = {
       .setTitle('> Help')
       .setColor('BLURPLE')
       .setDescription(
-        `These are our most used commands! Please keep in mind that you can find every command on our [Website](https://ticketer.developersdungeon.xyz/commands).\n\n__Commands__${helpMessage}\n__Support__\nFeel free to contact us on our [Discord Server](https://discord.gg/NqDGtcB8Zt) if you have any questions or suggestions.\n\n__Developers Dungeon__\nThis project is brought to you by [Developers Dungeon Studios](https://developersdungeon.xyz/).`,
+        `These are our most used commands! Please keep in mind that you can find every command on our [Website](https://ticketer.developersdungeon.xyz/commands).\n\n__Commands__${helpMessage}\n__Support__\nFeel free to contact us on our [Discord Server](https://discord.gg/NqDGtcB8Zt) if you have any questions or suggestions.\n\n__Developers Dungeon__\nThis project is brought to you by [Developers Dungeon Studios](${process.env.WEBSITE}/).`,
       )
       .setFooter({
         text: interaction.user.tag,
@@ -41,7 +42,7 @@ module.exports = {
         .setStyle('LINK'),
       new MessageButton()
         .setLabel('Invite')
-        .setURL('https://discord.com/api/oauth2/authorize?client_id=977591057711792178&permissions=137909037169&scope=bot%20applications.commands')
+        .setURL(`${process.env.INVITE_LINK}`)
         .setStyle('LINK'),
       new MessageButton()
         .setLabel('Github')

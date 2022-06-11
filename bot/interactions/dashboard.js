@@ -1,5 +1,6 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
 const { MessageEmbed, MessageButton, MessageActionRow } = require('discord.js');
+require('dotenv').config();
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -10,14 +11,14 @@ module.exports = {
       .setColor('BLURPLE')
       .setTimestamp()
       .setDescription(
-        `You can open the dashboard by clicking [here](https://ticketer.developersdungeon.xyz/dashboard/${interaction.guild.id}) or using the button below!`,
+        `You can open the dashboard by clicking [here](${process.env.WEBSITE}/dashboard/${interaction.guild.id}) or using the button below!`,
       )
       .setFooter({ text: interaction.user.username, iconURL: interaction.user.avatarURL({ dynamic: true }) });
     const row = new MessageActionRow().addComponents(
       new MessageButton()
         .setLabel('Dashboard')
         .setURL(
-          `https://ticketer.developersdungeon.xyz/dashboard/${interaction.guild.id}`,
+          `${process.env.WEBSITE}/dashboard/${interaction.guild.id}`,
         )
         .setStyle('LINK'),
     );
