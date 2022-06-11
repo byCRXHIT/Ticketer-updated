@@ -38,6 +38,16 @@ body .list {
     margin-top: 100px;
     width: 100vw;
     flex-wrap: wrap;
+    position: relative;
+    padding-top: 30px;
+}
+
+body .list .info {
+    position: absolute;
+    top: 0;
+    color: #a7a7a7;
+    font-size: 1.1rem;
+    font-weight: 500;
 }
 
 body .list .guild {

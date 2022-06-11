@@ -20,6 +20,7 @@
     <%- include('./partials/navbar.ejs') %>
 
     <div class="list">
+        <p class="info">If you can't see all servers or servers have no image, try to log in again.</p>
         <% let guildCount = 1; %>
         <% guilds.forEach((guild) => { %>
             <div class="guild <%= guild.joined %>">

@@ -1,5 +1,5 @@
 <div class="setting" id="setup_bot">
-    <h3 class="title">Setup bot</h3>
+    <h3 class="title">Find the dashboard</h3>
     <p class="description">
         In the
         <a class="link" href="/dashboard">dashboard</a>
@@ -14,10 +14,26 @@
         </script>
         command to get directly to the server dashboard.
         <br><br>
-        After you have selected your server, you should see a statistics page. Since this tutorial is not about statistics, we will first click on General.
+        After you have selected your server, you should see a statistics page.
     </p>
-    <img src="/assets/img/docs_setup1.png" alt="Image" class="image">
+    <br>
+    <h3 class="title">General settings</h3>
     <p class="description">
-        First, you can set how the ticket names should be named. By default, this is set to ticket-{id}. If you change the value, the channel names will look different.
+        Since this tutorial is not about statistics, we will first click on General.
+        <br>
+        <img src="https://cdn.discordapp.com/attachments/947958518772809748/985185155746496604/unknown.png" alt="Image" class="image">
+        <br>
+        First of all, you can give the bot a name of your own, meaning what you want the bot to be called on your server. The bot will then rename itself automatically.
+        <br><br>
+        Below you will find the ticket name setting. This allows you to rename the ticket channel. By default this is set to ticket-{id}. You can change this to include placeholders like {id} which will be replaced by the ticket id, {user_name} which will be replaced by the user name or {user_tag} which will be replaced by the user tag.
+        <br><br>
+        Under the ticket channel category you can set in which channel the ticket embed should be sent and in which category the tickets should be created. Tickets will then be created with the name set before. Use - none - if tickets are to be created at the top without a category. If you don't see a channel or category, try reloading the page. You can always open a support ticket on our 
+        <a class="link" href="https://discord.gg/NqDGtcB8Zt">support server</a>.
+        <br><br>
+        After you set the category, you can optionally say what is the maximum number of tickets a user can have on your server. By default, this is set to 3 and can be a maximum of 10 and a minimum of 1.
+        <br><br>
+        Let's get to the ticket message. This is the message that is sent to the channel to create a ticket. You can use the normal Discord formatting in this one. This message should tell users how to create a ticket and should be no more than 400 characters long.
+        <br><br>
+        Make sure you click save in the lower right corner each time to make all settings effective. If the panel is not sent, try /resend in the channel where the panel should be sent in.
     </p>
 </div>
