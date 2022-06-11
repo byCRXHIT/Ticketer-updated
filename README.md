@@ -1,3 +1,5 @@
+## ⚠ Note: This version is just a small modified version that fits my expectations. I do not recommend using it for daily use.
+
 <br>
 Note: Please use NodeJS Version 16.
 Video on how to use is comming up soon!
