@@ -42,7 +42,7 @@ Installing the required packages:
 npm install
 ```
 
-Running the bot:
+Start the bot:
 ```bash
 npm run start
 ```
