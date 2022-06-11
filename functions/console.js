@@ -20,7 +20,7 @@ module.exports = {
         .addField('Location', '`' + location + '`')
         .setTimestamp();
 
-      client.channels.cache.get(`${process.env.DEVGUILD_ID}`).send({ embeds: [consoleEmbed] });
+      client.channels.cache.get(`${process.env.CONSOLE}`).send({ embeds: [consoleEmbed] });
     }
   },
 };
