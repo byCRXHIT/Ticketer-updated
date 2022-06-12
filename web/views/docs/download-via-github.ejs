@@ -36,6 +36,10 @@
         <a class="command" id="ddtoken">DEVELOPERSDUNGEON=</a>
         <br>
         <a class="command" id="callback">CALLBACK_URL=</a>
+        <br>
+        <a class="command" id="log">LOG_CHANNEL=</a>
+        <br>
+        <a class="command" id="port">PORT=</a>
         <script>
             tippy('#token', {
                 content: 'The token is the bot\'s token. You can get it from the discord website.'
@@ -57,6 +61,12 @@
             })
             tippy('#callback', {
                 content: 'The callback url is the url where the discord app redirects to. It has to be a valid url.'
+            })
+            tippy('#log', {
+                content: 'The log channel is the channel where the bot logs errors to. It has to be a valid channel id.'
+            })
+            tippy('#port', {
+                content: 'The port is the port where the website listens to. It has to be a port between 10 and 9999.'
             })
         </script>
         <br><br>

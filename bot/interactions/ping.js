@@ -8,7 +8,6 @@ module.exports = {
 
   async execute(interaction, client) {
     const pingembed = new MessageEmbed()
-
       .setColor('BLURPLE')
       .setTitle('> Ping')
       .setFooter({ text: interaction.user.username, iconURL: interaction.user.avatarURL({ dynamic: true }) })
