@@ -27,13 +27,12 @@ To use this bot follow the steps given down below.
 ```
 TOKEN=
 DATABASE_URI=
-CLIENT_ID= 
-DEVGUILD_ID=
+GUILD_ID=
 CLIENT_SECRET=
-DEVELOPERSDUNGEON=
 CALLBACK_URL=
-LOG_CHANNEL=
+API_KEY=
 PORT=
+LOG_CHANNEL=
 ```
 If you are unsure on how to get certaint values for the .env open a ticket on our [support server](https://discord.gg/KfBkKKydfg)
 
