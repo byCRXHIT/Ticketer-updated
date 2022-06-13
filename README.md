@@ -1,5 +1,3 @@
-## ⚠ Note: This version is just a small modified version that fits my workflow. I do not recommend using it for daily use.
-
 <br>
 Note: Please use NodeJS Version 16.
 Video on how to use is comming up soon!
@@ -13,3 +11,7 @@ Video on how to use is comming up soon!
 - `npm start`
 - Now invite the bot using the invite in the .env file. **Note: Change the "APPLICATION_ID" in the link to your Bot ID!**
 - Your bot should now be ready to go!
+
+## ⚠️ Please note: This is far from stable
+
+I won't recommend using this bot until the first release marked as stable is out.
