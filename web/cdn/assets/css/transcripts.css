@@ -262,7 +262,7 @@ body .saveChanges {
     border-radius: 8px;
     position: fixed;
     width: fit-content;
-    right: 10px;
+    right: 20px;
     bottom: 10px;
     z-index: 99999;
 }
@@ -292,10 +292,10 @@ body .saveChanges .text {
     margin: 0;
     color: #ffffff;
     font-weight: 500;
-    font-display: swap;
     justify-self: flex-start;
     overflow: hidden;
     text-overflow: ellipsis;
+    margin-left: 16px;
 }
 
 body .saveChanges .button {

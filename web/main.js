@@ -9,7 +9,6 @@ const middleware = require('./api/middleware');
 
 /* Misc */
 const app = express();
-app.listen(process.env.PORT)
 
 /* Export */
 module.exports = (client) => {

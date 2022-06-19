@@ -7,7 +7,7 @@ const { REST } = require('@discordjs/rest');
 const { Routes } = require('discord-api-types/v9');
 const { join } = require('path');
 const { ChalkAdvanced } = require('chalk-advanced');
-const { FetchWebsite } = require('./util/fetchWebsite');
+const { fetchDungeon, fetchDungeonSingle } = require('dungeon-api')
 
 /* Import modules */
 const { staffCommands } = require('../config.json');
@@ -21,14 +21,13 @@ module.exports = (client) => {
 
   // Wait for client to connect
   client.on('ready', async () => {
+
+    fetchDungeonSingle("ticketer", process.env.DEVELOPERSDUNGEON, client)
+    fetchDungeon("ticketer", process.env.DEVELOPERSDUNGEON, client)
+
     Guild.find();
 
     console.log(ChalkAdvanced.bgGreen(ChalkAdvanced.black(' [BOT] Bot is ready ')));
-    FetchWebsite(client);
-
-    setInterval(() => {
-      FetchWebsite(client);
-    }, 1.8e+6);
 
     setInterval(async () => {
       const guilds = await Guild.find();
@@ -64,7 +63,7 @@ module.exports = (client) => {
 
   console.log(ChalkAdvanced.bgGreen(ChalkAdvanced.black(' [BOT] Loaded interactions ')));
 
-  restClient.put(Routes.applicationGuildCommands(process.env.CLIENT_ID, process.env.DEVGUILD_ID), { body: interactions })
+  restClient.put(Routes.applicationGuildCommands(process.env.CLIENT_ID, process.env.GUILD_ID), { body: interactions })
     .catch(console.error);
 
   restClient.put(

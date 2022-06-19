@@ -86,7 +86,9 @@ module.exports = (interaction, client, dbGuild) => {
           .setFooter({ text: interaction.user.tag, iconURL: interaction.user.avatarURL({ dynamic: true }) })
           .setTimestamp();
 
-        return interaction.channel.send({ embeds: [errorEmbed], ephemeral: true });
+          try {
+            return interaction.channel.send({ embeds: [errorEmbed], ephemeral: true });
+          } catch (e) { return }
       }
     }, 10000);
   }

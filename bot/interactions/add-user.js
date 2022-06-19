@@ -16,6 +16,17 @@ module.exports = {
       if (interaction.member.roles.cache.has(dbGuild.settings.staff.role) || dbGuild.settings.staff.members.includes(interaction.user.id)) {
         const value = interaction.options.getUser('user').id;
         const dbTicket = dbGuild.tickets[dbGuild.tickets.findIndex((t) => t.channel == interaction.channelId)];
+        
+        if (!dbTicket) {
+          const errorEmbed = new MessageEmbed()
+            .setTitle('> Claim ticket')
+            .setColor('RED')
+            .setDescription('This ticket does not exist.')
+            .setFooter({ text: interaction.user.tag, iconURL: interaction.user.avatarURL({ dynamic: true }) })
+            .setTimestamp();
+
+          return interaction.reply({ embeds: [errorEmbed], ephemeral: true });
+        }
 
         const user = await interaction.guild.members.fetch(value);
 
@@ -29,6 +40,7 @@ module.exports = {
 
           return interaction.channel.send({ embeds: [errorEmbed], ephemeral: true });
         }
+        
         if (dbTicket.members.findIndex((m) => m.id == value) == -1) {
           dbTicket.members.push({ id: user.user.id, name: user.user.tag });
 

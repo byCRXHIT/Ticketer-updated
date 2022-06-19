@@ -45,7 +45,7 @@ module.exports = (app, client) => {
     failureRedirect: '/',
     session: true,
   }), async (req, res) => {
-    await res.redirect('/');
+    await res.redirect('/dashboard');
   });
 
   app.get('/api/logout', (req, res) => {
@@ -164,6 +164,7 @@ module.exports = (app, client) => {
       if (!user.permissions.has(Permissions.FLAGS.MANAGE_GUILD)) return res.redirect('/dashboard');
 
       try {
+        if(dbGuild.settings.channel == 'none') return;
         const channel = await guild.channels.fetch(dbGuild.settings.channel);
         if (channel && dbGuild.settings.message !== 'none') {
           const msg = await channel.messages.fetch(dbGuild.settings.message);

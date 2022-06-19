@@ -13,6 +13,8 @@ module.exports = {
         iconURL: client.user.avatarURL(),
       })
       .setColor('BLURPLE')
+      .setTitle('> Vote')
+      .setDescription('Voting helps **Ticketer** gain more active users! So make sure to vote every day!')
       .setTitle(
         'Voting helps **Ticketer** gain more active users! So make sure to vote every day!',
       )
